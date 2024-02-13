@@ -14,3 +14,6 @@ create table if not exists "user" (
     username varchar(255) unique,
     password varchar(255)
 );
+/* 2024-02-13 15:31 */
+alter table "user" add column if not exists token varchar(255);
+alter table "user" add column if not exists token_expires_at timestamp;
