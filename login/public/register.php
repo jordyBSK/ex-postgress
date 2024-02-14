@@ -11,3 +11,5 @@ if (!isset($_POST['username'], $_POST['password'])) {
     throw new Exception('Please enter a valid username and password');
 }
 
+// create a new user
+$connection->register($_POST['username'], $_POST['password']);

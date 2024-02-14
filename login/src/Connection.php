@@ -22,4 +22,7 @@ class Connection {
         $token = $this->database->connect($_POST['username'], $_POST['password']);
         return $token;
     }
+    public function register(string $username, string $password) {
+        $this->database->register($_POST['username'], $_POST['password']);
+    }
 }
