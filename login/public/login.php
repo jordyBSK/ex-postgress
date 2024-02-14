@@ -1,4 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-session_start();
+
+use Jordybsk\ExPostgress\Connection;
+$connection = new Connection();
 
