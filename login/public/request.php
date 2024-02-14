@@ -9,3 +9,8 @@ $connection = new Connection();
 // check if user is already logged in
 if (!$connection->isConnected())
     throw new Exception('Please log in first');
+
+// check if the request has an url
+if (!isset($_POST['url']))
+    throw new Exception('Please enter a valid url');
+
