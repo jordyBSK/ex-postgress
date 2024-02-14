@@ -37,7 +37,7 @@ class Connection {
         $this->database->register($_POST['username'], $_POST['password']);
     }
 
-    public function CallAPI(string $method, string $url, array|null $data = null, string|null $auth = null) {
+    public function callAPI(string $method, string $url, array|null $data = null, string|null $auth = null): bool|string {
         $curl = curl_init();
 
         switch ($method) {
