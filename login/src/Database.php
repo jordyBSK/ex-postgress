@@ -29,6 +29,16 @@ readonly class Database {
         throw new \Exception('Username or password is incorrect');
     }
     /**
+     * Check if a token exists and is still valid
+     * @param string $token
+     * @return bool
+     */
+    public function verifyToken(string $token): bool {
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM "user" WHERE token = ?');
+        $stmt->execute([$token]);
+        return $stmt->fetchColumn() > 0;
+    }
+    /**
 	 * Register a new user
      * @param string $username
      * @param string $password

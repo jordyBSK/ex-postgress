@@ -18,8 +18,19 @@ class Connection {
             new PDO('sqlite:'.__DIR__.'/../'.$_ENV['DB_NAME'])
         );
     }
+    public function isConnected(): bool {
+        // check if user is already logged in
+        if (isset($_SESSION['token'])) {
+            if ($this->database->verifyToken($_SESSION['token'])) 
+                return true;
+            unset($_SESSION['token']);
+        }
+        return false;
+    }
+
     public function connect(string $username, string $password): string {
         $token = $this->database->connect($_POST['username'], $_POST['password']);
+        $_SESSION['token'] = $token;
         return $token;
     }
     public function register(string $username, string $password) {
