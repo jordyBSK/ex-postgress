@@ -5,6 +5,7 @@ import './index.css'
 import LoginElement from "./components/LoginElement.tsx";
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import DashboardElement from "./components/DashboardElement.tsx";
+import RegisterElement from "./components/RegisterElement.tsx";
 
 const router = createBrowserRouter([
     {
@@ -12,8 +13,12 @@ const router = createBrowserRouter([
         Component: App,
         children: [
             {
-                path:"/login",
+                path:"/",
                 element: <LoginElement/>
+            },
+            {
+                path:"/register",
+                element: <RegisterElement/>
             },
             {
                 path:"/home",
