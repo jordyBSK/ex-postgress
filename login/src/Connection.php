@@ -37,7 +37,7 @@ class Connection {
         $this->database->register($_POST['username'], $_POST['password']);
     }
 
-    public function CallAPI($method, $url, $data = false) {
+    public function CallAPI(string $method, string $url, array|null $data = null, string|null $auth = null) {
         $curl = curl_init();
 
         switch ($method) {
@@ -56,8 +56,10 @@ class Connection {
         }
 
         // Optional Authentication:
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+        if ($auth) {
+            curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($curl, CURLOPT_USERPWD, $auth);
+        }
 
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
