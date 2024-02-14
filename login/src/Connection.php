@@ -37,11 +37,10 @@ class Connection {
         $this->database->register($_POST['username'], $_POST['password']);
     }
 
-    function CallAPI($method, $url, $data = false) {
+    public function CallAPI($method, $url, $data = false) {
         $curl = curl_init();
 
-        switch ($method)
-        {
+        switch ($method) {
             case "POST":
                 curl_setopt($curl, CURLOPT_POST, 1);
 

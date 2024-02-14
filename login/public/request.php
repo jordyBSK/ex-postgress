@@ -14,3 +14,5 @@ if (!$connection->isConnected())
 if (!isset($_POST['url']))
     throw new Exception('Please enter a valid url');
 
+// send a request to the url provided with the data provided
+echo $connection->callAPI('GET', $_POST['url'], $_POST['data']);
