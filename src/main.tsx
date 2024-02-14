@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import LoginElement from "./components/LoginElement.tsx";
-
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import DashboardElement from "./components/Dashboard.tsx";
 
 const router = createBrowserRouter([
     {
@@ -17,6 +17,7 @@ const router = createBrowserRouter([
             },
             {
                 path:"/home",
+             element: <DashboardElement/>
             }
         ]
     },
