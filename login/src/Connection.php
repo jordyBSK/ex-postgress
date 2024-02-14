@@ -9,5 +9,10 @@ class Connection {
         // query data from .env file
         $dotenv = new Dotenv();
         $dotenv->load(__DIR__.'/../.env');
+
+        // connect to database
+        $this->database = new Database(
+            new PDO('sqlite:'.__DIR__.'/../'.$_ENV['DB_NAME'])
+        );
     }
 }
