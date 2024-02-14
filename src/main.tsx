@@ -4,7 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import LoginElement from "./components/LoginElement.tsx";
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import DashboardElement from "./components/Dashboard.tsx";
+import DashboardElement from "./components/DashboardElement.tsx";
 
 const router = createBrowserRouter([
     {

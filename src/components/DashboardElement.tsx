@@ -5,7 +5,7 @@ export default function dashboardElement() {
     return (
         <>
             <TemperatureElement temperature={2}/>
-            <HumidityElement humidity={2}/>
+            <HumidityElement/>
 
         </>
     )
