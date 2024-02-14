@@ -2,6 +2,7 @@
 
 namespace Jordybsk\ExPostgress;
 
+use Random\RandomException;
 
 readonly class Database {
     public function __construct(private \PDO $pdo) {}
@@ -10,6 +11,7 @@ readonly class Database {
      * @param string $username
      * @param string $password
      * @return string a token
+     * @throws RandomException
      */
     public function connect(string $username, string $password): string {
 		// get the hash of the password for the given username
@@ -17,12 +19,12 @@ readonly class Database {
         $stmt->execute([$username]);
         $hash = $stmt->fetchColumn();
         if (password_verify($password, $hash)) {
-            // generate a random token
-			// TODO: generate an expiration date
+            // generate a random token an expiration date
             $token = bin2hex(random_bytes(32));
-            // store the token
-            $stmt = $this->pdo->prepare('UPDATE "user" SET token = ? WHERE username = ?');
-            $stmt->execute([$token, $username]);
+            $tokenExpiresAt = date('Y-m-d H:i:s', strtotime('+1 day'));
+            // store the token and expiration date in the database
+            $stmt = $this->pdo->prepare('UPDATE "user" SET token = ?, token_expires_at = ? WHERE username = ?');
+            $stmt->execute([$token, $tokenExpiresAt, $username]);
             // return the token
             return $token;
         }
@@ -34,8 +36,8 @@ readonly class Database {
      * @return bool
      */
     public function verifyToken(string $token): bool {
-        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM "user" WHERE token = ?');
-        $stmt->execute([$token]);
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM "user" WHERE token = ? AND token_expires_at > ?');
+        $stmt->execute([$token, date('Y-m-d H:i:s')]);
         return $stmt->fetchColumn() > 0;
     }
     /**
