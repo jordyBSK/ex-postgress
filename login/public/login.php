@@ -11,4 +11,5 @@ if (!isset($_POST['username'], $_POST['password'])) {
     throw new Exception('Please enter a valid username and password');
 }
 
-$connection->connect($_POST['username'], $_POST['password']);
+// check if username and password are correct
+echo $connection->connect($_POST['username'], $_POST['password']);

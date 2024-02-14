@@ -12,7 +12,14 @@ readonly class Database {
         $stmt->execute([$username]);
         $hash = $stmt->fetchColumn();
         if (password_verify($password, $hash)) {
-			// TODO: generate a random token and an expiration date
+            // generate a random token
+			// TODO: generate an expiration date
+            $token = bin2hex(random_bytes(32));
+            // store the token
+            $stmt = $this->pdo->prepare('UPDATE "user" SET token = ? WHERE username = ?');
+            $stmt->execute([$token, $username]);
+            // return the token
+            return $token;
         }
         throw new \Exception('Username or password is incorrect');
     }

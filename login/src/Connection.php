@@ -19,6 +19,7 @@ class Connection {
         );
     }
     public function connect(string $username, string $password): string {
-		$this->database->connect($_POST['username'], $_POST['password']);
+        $token = $this->database->connect($_POST['username'], $_POST['password']);
+        return $token;
     }
 }
