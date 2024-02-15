@@ -18,17 +18,11 @@ class Connection {
     }
     public function isConnected(): bool {
         // check if user is already logged in
-        if (isset($_SESSION['token'])) {
-            if ($this->database->verifyToken($_SESSION['token'])) 
-                return true;
-            unset($_SESSION['token']);
-        }
-        return false;
+        return (isset($_POST['token']) && $this->database->verifyToken($_POST['token']));
     }
 
     public function connect(string $username, string $password): string {
         $token = $this->database->connect($username, $password);
-        $_SESSION['token'] = $token;
         return $token;
     }
     public function register(string $username, string $password) {
