@@ -28,7 +28,7 @@ readonly class Database {
             // return the token
             return $token;
         }
-        Lib::respond(['message' => 'Username or password is incorrect']);
+        Lib::respond('Username or password is incorrect');
     }
     /**
      * Check if a token exists and is still valid
