@@ -39,6 +39,8 @@ class Lib {
         return $result;
     }
     #[NoReturn] public static function respond(string $message, array $data = []): void {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Headers: Content-Type");
         header('Content-type: application/json');
         echo json_encode(['message' => $message, ...$data], JSON_PRETTY_PRINT);
         exit;
