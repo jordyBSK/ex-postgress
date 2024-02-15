@@ -21,4 +21,4 @@ $response = $connection->callAPI('GET', $_POST['url'], $_POST['data']);
 if (!$response)
 	Lib::respond('Request failed');
 
-Lib::respond('Request successful', ['response' => json_decode($response)]);
+Lib::respond('Request successful', ['response' => json_decode($response) ?? htmlspecialchars($response)]);
