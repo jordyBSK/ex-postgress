@@ -17,8 +17,12 @@ if (!isset($_GET['url']))
 
 // send a request to the url provided with the data provided
 
-$response = $connection->callAPI('GET', $_GET['url'], $_GET['data']);
-if (!$response)
-	Lib::respond('Request failed');
+$rawResponse = $connection->callAPI('GET', $_GET['url'], $_GET['data']);
 
-Lib::respond('Request successful', ['response' => json_decode($response) ?? htmlspecialchars($response)]);
+if (!$rawResponse)
+    Lib::respond('Request failed');
+$response = json_decode($rawResponse);
+if (!$response)
+	Lib::respond('Request not a json', ['response' => $rawResponse]);
+
+Lib::respond('Request successful', ['response' => $response]);
