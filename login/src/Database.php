@@ -50,4 +50,9 @@ readonly class Database {
         $stmt = $this->pdo->prepare('INSERT INTO "user" (username, password) VALUES (?, ?)');
         $stmt->execute([$username, password_hash($password, PASSWORD_DEFAULT)]);
     }
+
+    public function logout(string $token) {
+        $stmt = $this->pdo->prepare('UPDATE "user" SET token = NULL, token_expires_at = NULL WHERE token = ?');
+        $stmt->execute([$token]);
+    }
 }

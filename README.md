@@ -41,3 +41,11 @@ The request endpoint is used to send a request to any server, it only send reque
 	}
 }
 ```
+### Logout
+The logout endpoint will remove the token from the server's database wich will make it invalid
+`http://localhost:8000/logout.php` with the following body:
+```jsonc
+{
+	"token": "xxxxx"
+}
+```

@@ -31,4 +31,8 @@ class Connection {
     public function callAPI(string $method, string $url, array|string|null $data) {
         return Lib::callAPI($method, $url, is_string($data) ? json_decode($data, true) : $data);
     }
+
+    public function logout() {
+        $this->database->logout($_GET['token']);
+    }
 }
