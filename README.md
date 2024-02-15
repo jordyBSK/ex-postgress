@@ -10,7 +10,7 @@ cd login
 composer install
 php -S localhost:8000 -t public
 ```
-Once the server is running, you can send a POST request to `http://localhost:8000/login.php` with the following body:
+Once the server is running, you can send a GET request to `http://localhost:8000/login.php` with the following body:
 ```json
 {
 	"username": "xxxxx",

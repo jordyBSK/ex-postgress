@@ -12,9 +12,9 @@ if ($connection->isConnected())
     Lib::respond('You are already logged in');
 
 // check if password and username are set
-if (!isset($_POST['username'], $_POST['password']))
+if (!isset($_GET['username'], $_GET['password']))
     Lib::respond('Please enter a valid username and password');
 
 // check if username and password are correct
-$token = $connection->connect($_POST['username'], $_POST['password']);
+$token = $connection->connect($_GET['username'], $_GET['password']);
 Lib::respond('Login successful', ['token' => $token]);

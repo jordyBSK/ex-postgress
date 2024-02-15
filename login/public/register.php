@@ -8,19 +8,19 @@ use Jordybsk\ExPostgress\Lib;
 $connection = new Connection();
 
 // check if username and password are set
-if (!isset($_POST['username'], $_POST['password']))
+if (!isset($_GET['username'], $_GET['password']))
     Lib::respond('Please enter a valid username and password');
-if (empty($_POST['username']))
+if (empty($_GET['username']))
     Lib::respond('Username cannot be empty');
-if (mb_strlen($_POST['username']) > 255)
+if (mb_strlen($_GET['username']) > 255)
     Lib::respond('Username size cannot exceed 255 characters');
 // password needs to be at least 8 characters long, have at least one uppercase letter, one lowercase letter, one number and one special character
-if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s])\S{8,}$/', $_POST['password']))
+if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s])\S{8,}$/', $_GET['password']))
     Lib::respond('Password needs to be at least 8 characters long, have at least one uppercase letter, one lowercase letter, one number and one special character');
 
 // create a new user
 try {
-    $connection->register($_POST['username'], $_POST['password']);
+    $connection->register($_GET['username'], $_GET['password']);
 } catch (Exception $e) {
     switch ($e->getCode()) {
         case 23000:

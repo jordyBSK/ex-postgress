@@ -18,7 +18,7 @@ class Connection {
     }
     public function isConnected(): bool {
         // check if user is already logged in
-        return (isset($_POST['token']) && $this->database->verifyToken($_POST['token']));
+        return (isset($_GET['token']) && $this->database->verifyToken($_GET['token']));
     }
 
     public function connect(string $username, string $password): string {
@@ -26,7 +26,7 @@ class Connection {
         return $token;
     }
     public function register(string $username, string $password) {
-        $this->database->register($_POST['username'], $_POST['password']);
+        $this->database->register($_GET['username'], $_GET['password']);
     }
     public function callAPI(string $method, string $url, array|string|null $data) {
         return Lib::callAPI($method, $url, is_string($data) ? json_decode($data, true) : $data);
