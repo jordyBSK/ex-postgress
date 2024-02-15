@@ -34,7 +34,7 @@ class Connection {
     public function register(string $username, string $password) {
         $this->database->register($_POST['username'], $_POST['password']);
     }
-    public function callAPI(string $method, string $url, array $data) {
-        return Lib::callAPI($method, $url, $data);
+    public function callAPI(string $method, string $url, array|string|null $data) {
+        return Lib::callAPI($method, $url, is_string($data) ? json_decode($data, true) : $data);
     }
 }

@@ -16,4 +16,8 @@ if (!isset($_POST['url']))
     Lib::respond(['message' => 'Please enter a valid url']);
 
 // send a request to the url provided with the data provided
-Lib::respond(['message' => 'Request successful', 'response' => $connection->callAPI('GET', $_POST['url'], $_POST['data'])]);
+
+Lib::respond([
+    'message' => 'Request successful',
+    'response' => json_decode($connection->callAPI('GET', $_POST['url'], $_POST['data']))
+]);
