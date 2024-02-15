@@ -8,7 +8,7 @@ use Jordybsk\ExPostgress\Lib;
 $connection = new Connection();
 
 // check if user is logged in
-if ($connection->isConnected())
+if (!$connection->isConnected())
     Lib::respond('You are not logged in');
 
 // log out the user
