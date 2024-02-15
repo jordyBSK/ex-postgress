@@ -2,6 +2,8 @@
 
 namespace Jordybsk\ExPostgress;
 
+use JetBrains\PhpStorm\NoReturn;
+
 class Lib {
     public static function callAPI(string $method, string $url, array|null $data = null, string|null $auth = null): bool|string {
         $curl = curl_init();
@@ -35,5 +37,9 @@ class Lib {
         curl_close($curl);
 
         return $result;
+    }
+    #[NoReturn] public static function respond(array $data): void {
+        echo json_encode($data, JSON_PRETTY_PRINT);
+        exit;
     }
 }

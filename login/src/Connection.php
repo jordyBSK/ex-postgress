@@ -14,9 +14,7 @@ class Connection {
         $dotenv->load(__DIR__.'/../.env');
 
         // connect to database
-        $this->database = new Database(
-            new PDO('sqlite:'.__DIR__.'/../'.$_ENV['DB_NAME'])
-        );
+        $this->database = new Database(new PDO('sqlite:'.__DIR__.'/../'.$_ENV['DB_NAME']));
     }
     public function isConnected(): bool {
         // check if user is already logged in
@@ -29,14 +27,14 @@ class Connection {
     }
 
     public function connect(string $username, string $password): string {
-        $token = $this->database->connect($_POST['username'], $_POST['password']);
+        $token = $this->database->connect($username, $password);
         $_SESSION['token'] = $token;
         return $token;
     }
     public function register(string $username, string $password) {
         $this->database->register($_POST['username'], $_POST['password']);
     }
-    public function callAPI(string $string, mixed $url, mixed $data) {
-        return Lib::callAPI($string, $url, $data);
+    public function callAPI(string $method, string $url, array $data) {
+        return Lib::callAPI($method, $url, $data);
     }
 }
