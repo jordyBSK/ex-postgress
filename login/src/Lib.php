@@ -39,8 +39,7 @@ class Lib {
         return $result;
     }
     #[NoReturn] public static function respond(string $message, array $data = []): void {
-		$data['message'] = $message;
-        echo json_encode($data);
+        echo json_encode(['message' => $message, ...$data], JSON_PRETTY_PRINT);
         exit;
     }
 }
