@@ -30,7 +30,7 @@ export default function CircularDataElement(
     return (
         <svg className="w-24 h-24" viewBox="0 0 100 100">
             <circle
-                className={"text-" + color}
+                className={color}
                 cx="50"
                 cy="50"
                 r="45"

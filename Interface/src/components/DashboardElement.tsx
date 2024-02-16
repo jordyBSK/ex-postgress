@@ -6,7 +6,13 @@ import ChartElement from "./chartElement.tsx";
 export default function dashboardElement() {
 
     function averageData(
-        list: { "device_id": number, "timestamp": number, "temperature": number, "humidity": number, "light": number }[],
+        list: {
+            "device_id": number,
+            "timestamp": number,
+            "temperature": number,
+            "humidity": number,
+            "light": number
+        }[],
         call: (data: {
             "device_id": number,
             "timestamp": number,
@@ -23,17 +29,26 @@ export default function dashboardElement() {
     }
 
     function getMonthAverage(
-        list: { "device_id": number, "timestamp": number, "temperature": number, "humidity": number, "light": number }[],
+        list: {
+            "device_id": number,
+            "timestamp": number,
+            "temperature": number,
+            "humidity": number,
+            "light": number
+        }[],
     ): [
         string[],
         { "temperature": number[], "humidity": number[], "light": number[] }
     ] {
 
 
-
         const monthAverages =
-            { "temperature": [0,0,0,0,0,0,0,0,0,0,0,0], "humidity": [0,0,0,0,0,0,0,0,0,0,0,0], "light": [0,0,0,0,0,0,0,0,0,0,0,0] };
-        const monthCounts: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
+            {
+                "temperature": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                "humidity": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                "light": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            };
+        const monthCounts: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
         for (const data of list) {
             const month = new Date(data.timestamp).getMonth();
@@ -53,7 +68,7 @@ export default function dashboardElement() {
             }
         }
 
-        console.log("bbb",monthAverages)
+        console.log("bbb", monthAverages)
 
         return [monthNames, monthAverages];
     }
@@ -61,11 +76,25 @@ export default function dashboardElement() {
 
     return (
         <>
-            <div className="flex flex-row flex-wrap justify-evenly">
-                <CardElement element={<CircularDataElement color="blue-500" call={(data) => averageData(data, (data) => data.temperature)}/>}/>
-                <CardElement element={<CircularDataElement color="blue-500" call={(data) => data[data.length - 1].temperature}/>}/>
-                <CardElement element={<CircularDataElement color="orange-400" call={(data) => averageData(data, (data) => data.humidity)}/>}/>
-                <CardElement element={<CircularDataElement color="orange-400" call={(data) => data[data.length - 1].humidity}/>}/>
+            <div className="flex justify-evenly gap-12">
+                <div className="flex flex-col gap-y-2">
+                    <CardElement theme={"Temperature average"} element={<CircularDataElement color="text-blue-500"
+                                                               call={(data) => averageData(data, (data) => data.temperature)}/>}/>
+                    <CardElement theme={"Last temperature data"} element={<CircularDataElement color="text-blue-500"
+                                                               call={(data) => data[data.length - 1].temperature}/>}/>
+                </div>
+                 <div className="flex flex-col gap-y-2">
+                    <CardElement theme={"Humidity Average"} element={<CircularDataElement color="text-orange-400"
+                                                               call={(data) => averageData(data, (data) => data.humidity)}/>}/>
+                    <CardElement theme={"Last humidity data"} element={<CircularDataElement color="text-orange-400"
+                                                               call={(data) => data[data.length - 1].humidity}/>}/>
+                </div>
+                 <div className="flex flex-col gap-y-2">
+                    <CardElement theme={"Light Average"} element={<CircularDataElement color="text-green-400"
+                                                               call={(data) => averageData(data, (data) => data.humidity)}/>}/>
+                    <CardElement theme={"Last light data"} element={<CircularDataElement color="text-green-400"
+                                                               call={(data) => data[data.length - 1].light}/>}/>
+                </div>
             </div>
             <ChartElement call={(data) => getMonthAverage(data)}/>
         </>
