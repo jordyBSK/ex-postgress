@@ -7,7 +7,7 @@ export default function dashboardElement() {
     return (
         <>
             <div className="space-x-4 flex">
-                <CardElement  element={<TemperatureElement temperature={0}/>}/>
+                <CardElement  element={<TemperatureElement/>}/>
                 <CardElement element={<HumidityElement/>}/>
 
             </div>

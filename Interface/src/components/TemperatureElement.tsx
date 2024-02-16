@@ -1,9 +1,25 @@
+import {useEffect, useState} from "react";
 
-export default function TemperatureElement({ temperature }: {temperature:number}) {
+export default function TemperatureElement() {
+    const [temperature, setTemperature] = useState(0);
 
         const normalizedTemperature = Math.min(Math.max(temperature, 0), 50);
         const circumference = 2 * Math.PI * 45;
         const dashOffset = circumference - (circumference * normalizedTemperature) / -100;
+
+
+
+    useEffect(() => {
+        fetch('http://localhost:5000/main.py')
+            .then(response => response.json())
+            .then(data => {
+                setTemperature(data.temperature);
+            })
+            .catch(error => {
+                console.error('Une erreur s\'est produite:', error);
+            });
+    }, []);
+
 
     return (
         <svg className="w-24 h-24" viewBox="0 0 100 100">
