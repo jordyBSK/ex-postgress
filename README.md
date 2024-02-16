@@ -1,5 +1,10 @@
 # ex-postgress
 
+## Esp 32 Simulation
+In the repository you can find a "main.py" file, which can be used to simulate ESP32.\
+The file can be run with the following command: ``python main.py python3 main.py <url> [<amount of devices>] [<interval>]``\
+Once the file is running, it will send a POST request to the server at a given interval, simulating a given amount of devices.
+
 ## Login Backend
 Once the project is cloned, you can use the login backend
 1. Go to the folder `login`
