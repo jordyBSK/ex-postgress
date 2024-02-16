@@ -24,17 +24,17 @@ input(f"Simulating {amount} devices sending data to {host} every {interval} seco
 try:
 	while True:
 		start = datetime.now()
-		values = {
-			str(i): {
+		values = []
+		while (datetime.now() - start).total_seconds() < interval:
+			values.append({
+				"device_id": randint(0, amount - 1),
 				"timestamp": datetime.now().isoformat(),
 				"temperature": randint(0, 40),
 				"humidity": randint(0, 100),
 				"light": randint(0, 1000)
-			} for i in range(amount)
-		}
+			})
 		requests.post(f"{host}", data=dumps(values))
 		print(f"{datetime.now().isoformat()} {dumps(values, indent=4)}")
-		sleep(interval - (datetime.now() - start).total_seconds())
 except KeyboardInterrupt:
 	print("Exiting...")
 	exit(0)
