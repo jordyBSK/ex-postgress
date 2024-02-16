@@ -5,34 +5,43 @@ export default function ChartElement(
     {call} : {
         call:
             (data:{"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number}[])
-                => [string[], number[]]
+                => [string[], { "temperature": number[], "humidity": number[], "light": number[] }]
     }) {
 
     const [dateNames, setDateNames] = useState<string[]>([]);
-    const [displayDate, setDisplayDate] = useState<number[]>([]);
-
-
+    const [monthlyAverages, setMonthlyAverages] = useState<{ "temperature": number[], "humidity": number[], "light": number[] }>({ "temperature": [], "humidity": [], "light": [] }); // État pour stocker les moyennes mensuelles
 
     useEffect(() => {
         fetch('http://localhost:5175/index.php')
             .then(response => response.json())
             .then(data => {
-                setDateNames(call(data)[0])
-                setDisplayDate(call(data)[1])
+                const [names, monthAverages] = call(data);
+                setDateNames(names);
+                setMonthlyAverages(monthAverages);
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
             });
     }, []);
-    console.log(displayDate)
+
+    console.log("pomme", monthlyAverages, dateNames)
 
     useEffect(() => {
         const data = {
-            labels: dateNames,
+            labels:  dateNames,
             datasets: [
                 {
-                    values: displayDate,
+                    name: 'Average Temperature',
+                    values: monthlyAverages.temperature,
                 },
+                {
+                    name: 'Average Humidity',
+                    values: monthlyAverages.humidity
+                },
+                {
+                    name: 'Average Light',
+                    values: monthlyAverages.light
+                }
             ],
         };
 
@@ -40,14 +49,13 @@ export default function ChartElement(
             data: data,
             type: "line",
             height: 250,
-            colors: ["#7cd6fd"],
+            colors: ["#7cd6fd", "#ff9900", "#ffcc00"],
         });
 
         return () => {
             chart.destroy()
         };
-    }, []);
-
+    });
 
     return (
         <div id="chart"></div>
