@@ -7,8 +7,8 @@ export default function dashboardElement() {
     return (
         <>
             <div className="space-x-4 flex">
-                <CardElement  element={<TemperatureElement/>}/>
-                <CardElement element={<HumidityElement/>}/>
+                <CardElement  element={<TemperatureElement call={(data) => {return averageData(data, (data) => data.temperature)}}/>}/>
+                <CardElement element={<HumidityElement call={(data) => {return averageData(data, (data) => data.humidity)}}/>}/>
 
             </div>
 
@@ -17,4 +17,15 @@ export default function dashboardElement() {
 
         </>
     )
+}
+
+function averageData(
+    list: {"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number}[],
+    call: (data: {"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number})
+        => number) {
+    let out = 0
+    for (const listElement of list) {
+        out += call(listElement)
+    }
+    return out/list.length
 }
