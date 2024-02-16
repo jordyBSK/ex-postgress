@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-export default function HumidityElement() {
+export default function HumidityElement({call}:{call: (data: {"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number}[]) => number}) {
 
     const [humidity, setHumidity] = useState(0);
 
@@ -8,16 +8,12 @@ export default function HumidityElement() {
         fetch('http://localhost:5175/index.php')
             .then(response => response.json())
             .then(data => {
-                setHumidity (data.reduce((a:{humidity:number},b:{humidity:number}) => {
-                    return {humidity: (a.humidity + b.humidity)}
-                }).humidity / data.length )
+                setHumidity (call(data))
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
             });
-    }, []);
-
-
+    });
 
     const normalizedTemperature = Math.min(Math.max(humidity, 0), 50);
     const circumference = 2 * Math.PI * 45;

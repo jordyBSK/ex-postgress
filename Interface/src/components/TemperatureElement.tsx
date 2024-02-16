@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-export default function TemperatureElement() {
+export default function TemperatureElement({call}:{call: (data: {"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number}[]) => number}) {
     const [temperature, setTemperature] = useState(0);
 
         const normalizedTemperature = Math.min(Math.max(temperature, 0), 50);
@@ -13,12 +13,12 @@ export default function TemperatureElement() {
         fetch('http://localhost:5175/index.php')
             .then(response => response.json())
             .then(data => {
-                setTemperature(data.temperature);
+                setTemperature(call(data));
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
             });
-    }, []);
+    });
 
 
 
