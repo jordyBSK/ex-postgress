@@ -1,6 +1,7 @@
 # simulate a given amount of esp32 devices that send data through a given http server at a given interval
 # syntax: python3 main.py <host> [<amount of devices>] [<interval>]
 
+import requests
 from time import sleep
 from random import randint
 from json import dumps
@@ -31,6 +32,7 @@ try:
 				"light": randint(0, 1000)
 			} for i in range(amount)
 		}
+		requests.post(f"{host}", data=dumps(values))
 		print(f"{datetime.now().isoformat()} {dumps(values, indent=4)}")
 		sleep(interval - (datetime.now() - start).total_seconds())
 except KeyboardInterrupt:
