@@ -12,7 +12,8 @@ export default function dashboardElement() {
 
             </div>
 
-            <ChartElement/>
+            <ChartElement theme={"temperature"}/>
+            <ChartElement theme={"humidity"}/>
 
         </>
     )

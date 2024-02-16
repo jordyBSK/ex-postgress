@@ -10,7 +10,7 @@ export default function TemperatureElement() {
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/main.py')
+        fetch('http://localhost:5175/index.php')
             .then(response => response.json())
             .then(data => {
                 setTemperature(data.temperature);
@@ -19,6 +19,8 @@ export default function TemperatureElement() {
                 console.error('Une erreur s\'est produite:', error);
             });
     }, []);
+
+
 
 
     return (

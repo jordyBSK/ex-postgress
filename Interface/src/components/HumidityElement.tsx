@@ -5,10 +5,12 @@ export default function HumidityElement() {
     const [humidity, setHumidity] = useState(0);
 
     useEffect(() => {
-        fetch('http://localhost:5000/temperature')
+        fetch('http://localhost:5175/index.php')
             .then(response => response.json())
             .then(data => {
-                setHumidity(data.humidity);
+                setHumidity (data.reduce((a:{humidity:number},b:{humidity:number}) => {
+                    return {humidity: (a.humidity + b.humidity)}
+                }).humidity / data.length )
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
