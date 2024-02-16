@@ -16,14 +16,18 @@ amount = int(argv[2]) if len(argv) > 2 else 1
 interval = int(argv[3]) if len(argv) > 3 else 60
 
 # simulate the devices
-while True:
-	start = datetime.now()
-	values = {
-		str(i): {
-			"timestamp": datetime.now().isoformat(),
-			"temperature": randint(0, 40),
-			"humidity": randint(0, 100),
-			"light": randint(0, 1000)
-		} for i in range(amount)
-	}
-	sleep(interval - (datetime.now() - start).total_seconds())
+try:
+	while True:
+		start = datetime.now()
+		values = {
+			str(i): {
+				"timestamp": datetime.now().isoformat(),
+				"temperature": randint(0, 40),
+				"humidity": randint(0, 100),
+				"light": randint(0, 1000)
+			} for i in range(amount)
+		}
+		sleep(interval - (datetime.now() - start).total_seconds())
+except KeyboardInterrupt:
+	print("Exiting...")
+	exit(0)
