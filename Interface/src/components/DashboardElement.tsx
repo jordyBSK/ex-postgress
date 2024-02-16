@@ -1,8 +1,7 @@
 import CircularDataElement from "./CircularDataElement.tsx"
 import CardElement from "./cardElement.tsx";
 import ChartElement from "./chartElement.tsx";
-import {data} from "autoprefixer";
-import {list} from "postcss";
+
 
 export default function dashboardElement() {
 
@@ -19,7 +18,7 @@ export default function dashboardElement() {
                 <CardElement element={<CircularDataElement color="orange-400"
                                                            call={(data) => data[data.length - 1].humidity}/>}/>
             </div>
-            <ChartElement call={(data) => getAllDate(data)}/> {/* Modified this line */}
+            <ChartElement call={(data) => getAllDate(data)}/>
         </>
     )
 }
@@ -44,12 +43,15 @@ function averageData(
 
 function getAllDate(
     list: { "device_id": number, "timestamp": number, "temperature": number, "humidity": number, "light": number }[],
-) {
-    for (const date of list){
-        const timeStamp = date.timestamp
-        const dateFormat = new Date(timeStamp)
-        console.log(dateFormat)
+): [string[], number[]] {
+    const month_names: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const month_map: number[] = [0,0,0,0,0,0,0,0,0,0,0,0]
 
+    for (const date of list){
+        const month = new Date(date.timestamp).getMonth()
+        month_map[month]++
     }
+
+    return [month_names,month_map]
 }
 

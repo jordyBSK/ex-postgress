@@ -5,10 +5,11 @@ export default function ChartElement(
     {call} : {
         call:
             (data:{"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number}[])
-                => number
+                => [string[], number[]]
     }) {
 
-    const [displayDate, setDisplayDate] = useState(0);
+    const [dateNames, setDateNames] = useState<string[]>([]);
+    const [displayDate, setDisplayDate] = useState<number[]>([]);
 
 
 
@@ -16,22 +17,21 @@ export default function ChartElement(
         fetch('http://localhost:5175/index.php')
             .then(response => response.json())
             .then(data => {
-                setDisplayDate(call(data))
+                setDateNames(call(data)[0])
+                setDisplayDate(call(data)[1])
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
             });
     }, []);
-
-
-
+    console.log(displayDate)
 
     useEffect(() => {
         const data = {
-            labels: [],
+            labels: dateNames,
             datasets: [
                 {
-                    values: [12, 40, 30, 35, 8, 52, 17],
+                    values: displayDate,
                 },
             ],
         };
