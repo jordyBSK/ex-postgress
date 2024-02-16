@@ -5,7 +5,7 @@ export default function CardElement({element} :{element : ReactNode} ) {
     return (
         <>
             <div
-                className="transform  rounded-xl min-h-40 min-w-40  bg-white shadow-xl">
+                className="rounded-xl h-40 w-64 bg-white shadow-lg">
                 <div className="flex h-full justify-center items-center">
                     {element}
                 </div>

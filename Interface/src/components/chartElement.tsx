@@ -1,18 +1,22 @@
 import {useEffect, useState} from "react";
 import {Chart} from "frappe-charts";
 
-export default function ChartElement({theme}:{theme:string}) {
+export default function ChartElement(
+    {call} : {
+        call:
+            (data:{"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number}[])
+                => number
+    }) {
 
-    const [temperature, setTemperature] = useState(0);
-    const [humidity, setHumidity] = useState(0);
+    const [displayDate, setDisplayDate] = useState(0);
 
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/main.py')
+        fetch('http://localhost:5175/index.php')
             .then(response => response.json())
             .then(data => {
-                setTemperature(data.temperature);
+                setDisplayDate(call(data))
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
@@ -24,10 +28,9 @@ export default function ChartElement({theme}:{theme:string}) {
 
     useEffect(() => {
         const data = {
-            labels: ["Mon", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            labels: [],
             datasets: [
                 {
-                    title: {theme},
                     values: [12, 40, 30, 35, 8, 52, 17],
                 },
             ],
