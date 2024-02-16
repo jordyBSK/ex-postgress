@@ -7,8 +7,10 @@ export default function dashboardElement() {
     return (
         <>
             <div className="space-x-4 flex">
-                <CardElement  element={<TemperatureElement call={(data) => {return averageData(data, (data) => data.temperature)}}/>}/>
-                <CardElement element={<HumidityElement call={(data) => {return averageData(data, (data) => data.humidity)}}/>}/>
+                <CardElement element={<TemperatureElement call={(data) => averageData(data, (data) => data.temperature)}/>}/>
+                <CardElement element={<TemperatureElement call={(data) => data[data.length - 1].temperature}/>}/>
+                <CardElement element={<HumidityElement call={(data) => averageData(data, (data) => data.humidity)}/>}/>
+                <CardElement element={<HumidityElement call={(data) => data[data.length - 1].humidity}/>}/>
 
             </div>
 
