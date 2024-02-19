@@ -1,9 +1,10 @@
-import {useEffect, useState, useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import { Chart } from 'chart.js/auto';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
 Chart.register(zoomPlugin);
-export default function ChartElement({call}: {
+
+export default function ChartElement({ call }: {
     call: (data: {
         "device_id": number,
         "timestamp": number,
@@ -18,7 +19,9 @@ export default function ChartElement({call}: {
         "temperature": number[],
         "humidity": number[],
         "light": number[]
-    }>({"temperature": [], "humidity": [], "light": []});
+    }>({ "temperature": [], "humidity": [], "light": [] });
+
+    const [selectedMonth, setSelectedMonth] = useState<string>('');
 
     const chartContainer = useRef<HTMLCanvasElement>(null);
     const [chart, setChart] = useState<Chart<"line", number[], string>>();
@@ -30,6 +33,7 @@ export default function ChartElement({call}: {
                 const [names, monthAverages] = call(data);
                 setDateNames(names);
                 setMonthlyAverages(monthAverages);
+                setSelectedMonth(names[0]); // Sélectionner le premier mois par défaut
 
                 if (chartContainer.current && names.length > 0) {
                     const ctx = chartContainer.current.getContext('2d');
@@ -73,7 +77,7 @@ export default function ChartElement({call}: {
                                             }, pinch: {
                                                 enabled: true
                                             },
-                                            mode:'x',
+                                            mode: 'xy',
                                         }
                                     }
                                 }
@@ -94,7 +98,54 @@ export default function ChartElement({call}: {
         };
     }, [call, chartContainer, chart]);
 
+    useEffect(() => {
+        if (chart && monthlyAverages.temperature.length > 0 && selectedMonth !== '') {
+            const selectedIndex = dateNames.indexOf(selectedMonth);
+            const newData = {
+                labels: "salut",
+                datasets: [
+                    {
+                        label: 'Temperature',
+                        data: monthlyAverages.temperature.slice(selectedIndex, selectedIndex + 1),
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Humidity',
+                        data: monthlyAverages.humidity.slice(selectedIndex, selectedIndex + 1),
+                        borderColor: 'rgb(54, 162, 235)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Light',
+                        data: monthlyAverages.light.slice(0, selectedIndex + 1),
+                        borderColor: 'rgb(255, 205, 86)',
+                        tension: 0.1
+                    }
+                ]
+            };
+            chart.data = newData;
+            chart.update();
+        }
+    }, [selectedMonth, monthlyAverages, dateNames, chart]);
+
+    const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedMonth(event.target.value);
+    };
+
     return (
-        <canvas ref={chartContainer}></canvas>
+        <div>
+            <canvas ref={chartContainer}></canvas>
+            <div>
+                <label>
+                    Choisissez le mois :
+                    <select value={selectedMonth} onChange={handleMonthChange}>
+                        {dateNames.map((month, index) => (
+                            <option key={index} value={month}>{month}</option>
+                        ))}
+                    </select>
+                </label>
+            </div>
+        </div>
     );
 }
