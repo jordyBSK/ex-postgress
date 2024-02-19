@@ -1,11 +1,24 @@
-import { useEffect, useState, useRef } from "react";
-import Chart from 'chart.js/auto';
+import {useEffect, useState, useRef} from "react";
+import { Chart } from 'chart.js/auto';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
-export default function ChartElement({ call }: { call: (data:{"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number}[]) => [string[], { "temperature": number[], "humidity": number[], "light": number[] }] }) {
+Chart.register(zoomPlugin);
+export default function ChartElement({call}: {
+    call: (data: {
+        "device_id": number,
+        "timestamp": number,
+        "temperature": number,
+        "humidity": number,
+        "light": number
+    }[]) => [string[], { "temperature": number[], "humidity": number[], "light": number[] }]
+}) {
 
     const [dateNames, setDateNames] = useState<string[]>([]);
-    const [monthlyAverages, setMonthlyAverages] = useState<{ "temperature": number[], "humidity": number[], "light": number[] }>({ "temperature": [], "humidity": [], "light": [] });
+    const [monthlyAverages, setMonthlyAverages] = useState<{
+        "temperature": number[],
+        "humidity": number[],
+        "light": number[]
+    }>({"temperature": [], "humidity": [], "light": []});
 
     const chartContainer = useRef<HTMLCanvasElement>(null);
     const [chart, setChart] = useState<Chart<"line", number[], string>>();
@@ -56,12 +69,11 @@ export default function ChartElement({ call }: { call: (data:{"device_id":number
                                     zoom: {
                                         zoom: {
                                             wheel: {
-                                                enabled: true,
-                                            },
-                                            pinch: {
+                                                enabled: true
+                                            }, pinch: {
                                                 enabled: true
                                             },
-                                            mode: 'xy',
+                                            mode:'x',
                                         }
                                     }
                                 }
@@ -83,6 +95,6 @@ export default function ChartElement({ call }: { call: (data:{"device_id":number
     }, [call, chartContainer, chart]);
 
     return (
-        <canvas  ref={chartContainer}></canvas>
+        <canvas ref={chartContainer}></canvas>
     );
 }
