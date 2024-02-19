@@ -2,19 +2,17 @@
 
 ## Esp 32 Simulation
 In the repository you can find a "esp32.py" file, which can be used to simulate ESP32.\
-The file can be run with the following command: ``python esp32.py <url> [<amount of devices>] [<interval>]``\
-Once the file is running, it will send a POST request to the server at a given interval, simulating a given amount of devices.
+The file can be run with the following command: ``python esp32.py <url> [<amount of devices>]``\
+Once the file is running, it will send a POST request to the server, simulating a given amount of devices.
 The data of the request looks like this:
 ```jsonc
-[
-	{
-		"device_id": "xxxxx",
-		"timestamp": "xxxxx",
-		"temperature": "xxxxx",
-		"humidity": "xxxxx",
-		"light": "xxxxx"
-	}
-]
+{
+	"device_id": "xxxxx",
+	"timestamp": "xxxxx",
+	"temperature": "xxxxx",
+	"humidity": "xxxxx",
+	"light": "xxxxx"
+}
 ```
 
 ## Login Backend
