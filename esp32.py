@@ -2,6 +2,7 @@
 # syntax: python3 main.py <host> [<amount of devices>]
 
 import requests
+
 from random import randint
 from json import dumps
 from datetime import datetime
