@@ -11,7 +11,7 @@ export default function CircularDataElement(
     const [displayNumber, setDisplayNumber] = useState(0);
 
     useEffect(() => {
-        fetch('http://localhost:5175/index.php')
+        fetch('http://localhost:5174/index.php')
             .then(response => response.json())
             .then(data => {
                 setDisplayNumber (call(data))

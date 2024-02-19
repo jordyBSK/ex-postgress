@@ -26,14 +26,15 @@ export default function ChartElement({ call }: {
     const chartContainer = useRef<HTMLCanvasElement>(null);
     const [chart, setChart] = useState<Chart<"line", number[], string>>();
 
+
     useEffect(() => {
-        fetch('http://localhost:5175/index.php')
+        fetch('http://localhost:5174/index.php')
             .then(response => response.json())
             .then(data => {
                 const [names, monthAverages] = call(data);
                 setDateNames(names);
                 setMonthlyAverages(monthAverages);
-                setSelectedMonth(names[0]); // Sélectionner le premier mois par défaut
+                setSelectedMonth(names[0]);
 
                 if (chartContainer.current && names.length > 0) {
                     const ctx = chartContainer.current.getContext('2d');
@@ -77,7 +78,7 @@ export default function ChartElement({ call }: {
                                             }, pinch: {
                                                 enabled: true
                                             },
-                                            mode: 'xy',
+                                            mode: 'y' ,
                                         }
                                     }
                                 }
@@ -100,25 +101,28 @@ export default function ChartElement({ call }: {
 
     useEffect(() => {
         if (chart && monthlyAverages.temperature.length > 0 && selectedMonth !== '') {
-            const selectedIndex = dateNames.indexOf(selectedMonth);
+            const monthSelect = dateNames.indexOf(selectedMonth);
+
+            const nextMonthIndex = monthSelect < dateNames.length - 1 ? monthSelect + 1 : monthSelect;
+
             const newData = {
-                labels: "salut",
+                labels: dateNames.slice(monthSelect, nextMonthIndex + 1),
                 datasets: [
                     {
                         label: 'Temperature',
-                        data: monthlyAverages.temperature.slice(selectedIndex, selectedIndex + 1),
+                        data: monthlyAverages.temperature.slice(monthSelect, nextMonthIndex + 1),
                         borderColor: 'rgb(255, 99, 132)',
                         tension: 0.1
                     },
                     {
                         label: 'Humidity',
-                        data: monthlyAverages.humidity.slice(selectedIndex, selectedIndex + 1),
+                        data: monthlyAverages.humidity.slice(monthSelect, nextMonthIndex + 1),
                         borderColor: 'rgb(54, 162, 235)',
                         tension: 0.1
                     },
                     {
                         label: 'Light',
-                        data: monthlyAverages.light.slice(0, selectedIndex + 1),
+                        data: monthlyAverages.light.slice(monthSelect, nextMonthIndex + 1),
                         borderColor: 'rgb(255, 205, 86)',
                         tension: 0.1
                     }
@@ -140,6 +144,7 @@ export default function ChartElement({ call }: {
                 <label>
                     Choisissez le mois :
                     <select value={selectedMonth} onChange={handleMonthChange}>
+                        <option value="default">default</option>
                         {dateNames.map((month, index) => (
                             <option key={index} value={month}>{month}</option>
                         ))}
