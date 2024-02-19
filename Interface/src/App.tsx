@@ -1,6 +1,5 @@
 import './App.css';
 import {Outlet} from "react-router-dom";
-import SideBarElement from "./components/SideBarElement.tsx";
 
 function App() {
 
@@ -8,8 +7,6 @@ function App() {
         <>
 
 
-
-            <SideBarElement/>
 
             <Outlet/>
         </>

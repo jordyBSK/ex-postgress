@@ -1,6 +1,7 @@
 import CircularDataElement from "./CircularDataElement.tsx"
 import CardElement from "./cardElement.tsx";
 import ChartElement from "./chartElement.tsx";
+import SideBarElement from "./SideBarElement.tsx";
 
 
 export default function dashboardElement() {
@@ -68,7 +69,6 @@ export default function dashboardElement() {
             }
         }
 
-        console.log("bbb", monthAverages)
 
         return [monthNames, monthAverages];
     }
@@ -76,6 +76,8 @@ export default function dashboardElement() {
 
     return (
         <>
+
+            <SideBarElement/>
             <div className="flex justify-evenly gap-12">
                 <div className="flex flex-col gap-y-2">
                     <CardElement theme={"Temperature average"} element={<CircularDataElement color="text-blue-500"

@@ -1,15 +1,14 @@
-import {useEffect, useState} from "react";
-import {Chart} from "frappe-charts";
+import { useEffect, useState, useRef } from "react";
+import Chart from 'chart.js/auto';
+import zoomPlugin from 'chartjs-plugin-zoom';
 
-export default function ChartElement(
-    {call} : {
-        call:
-            (data:{"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number}[])
-                => [string[], { "temperature": number[], "humidity": number[], "light": number[] }]
-    }) {
+export default function ChartElement({ call }: { call: (data:{"device_id":number,"timestamp":number,"temperature":number,"humidity":number,"light":number}[]) => [string[], { "temperature": number[], "humidity": number[], "light": number[] }] }) {
 
     const [dateNames, setDateNames] = useState<string[]>([]);
-    const [monthlyAverages, setMonthlyAverages] = useState<{ "temperature": number[], "humidity": number[], "light": number[] }>({ "temperature": [], "humidity": [], "light": [] }); // État pour stocker les moyennes mensuelles
+    const [monthlyAverages, setMonthlyAverages] = useState<{ "temperature": number[], "humidity": number[], "light": number[] }>({ "temperature": [], "humidity": [], "light": [] });
+
+    const chartContainer = useRef<HTMLCanvasElement>(null);
+    const [chart, setChart] = useState<Chart<"line", number[], string>>();
 
     useEffect(() => {
         fetch('http://localhost:5175/index.php')
@@ -18,46 +17,72 @@ export default function ChartElement(
                 const [names, monthAverages] = call(data);
                 setDateNames(names);
                 setMonthlyAverages(monthAverages);
+
+                if (chartContainer.current && names.length > 0) {
+                    const ctx = chartContainer.current.getContext('2d');
+                    if (ctx) {
+                        const newChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: names,
+                                datasets: [
+                                    {
+                                        label: 'Temperature',
+                                        data: monthAverages.temperature,
+                                        borderColor: 'rgb(255, 99, 132)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label: 'Humidity',
+                                        data: monthAverages.humidity,
+                                        borderColor: 'rgb(54, 162, 235)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label: 'Light',
+                                        data: monthAverages.light,
+                                        borderColor: 'rgb(255, 205, 86)',
+                                        tension: 0.1
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                },
+                                plugins: {
+                                    zoom: {
+                                        zoom: {
+                                            wheel: {
+                                                enabled: true,
+                                            },
+                                            pinch: {
+                                                enabled: true
+                                            },
+                                            mode: 'xy',
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        setChart(newChart);
+                    }
+                }
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
             });
-    }, []);
-
-    console.log("pomme", monthlyAverages, dateNames)
-
-    useEffect(() => {
-        const data = {
-            labels:  dateNames,
-            datasets: [
-                {
-                    name: 'Average Temperature',
-                    values: monthlyAverages.temperature,
-                },
-                {
-                    name: 'Average Humidity',
-                    values: monthlyAverages.humidity
-                },
-                {
-                    name: 'Average Light',
-                    values: monthlyAverages.light
-                }
-            ],
-        };
-
-        const chart = new Chart("#chart", {
-            data: data,
-            type: "line",
-            height: 250,
-            colors: ["#7cd6fd", "#ff9900", "#ffcc00"],
-        });
 
         return () => {
-            chart.destroy()
+            if (chart) {
+                chart.destroy();
+            }
         };
-    });
+    }, [call, chartContainer, chart]);
 
     return (
-        <div id="chart"></div>
-    )
+        <canvas  ref={chartContainer}></canvas>
+    );
 }
