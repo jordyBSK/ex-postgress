@@ -133,6 +133,8 @@ export default function ChartElement({ call }: {
         }
     }, [selectedMonth, monthlyAverages, dateNames, chart]);
 
+
+
     const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedMonth(event.target.value);
     };

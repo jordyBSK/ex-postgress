@@ -51,6 +51,8 @@ export default function dashboardElement() {
             };
         const monthCounts: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+
+
         for (const data of list) {
             const month = new Date(data.timestamp).getMonth();
             monthAverages.humidity[month] += data.humidity;
@@ -70,7 +72,52 @@ export default function dashboardElement() {
         }
 
 
+
         return [monthNames, monthAverages];
+    }
+
+    function getDayAverage(
+        list: {
+            "device_id": number,
+            "timestamp": number,
+            "temperature": number,
+            "humidity": number,
+            "light": number
+        }[],
+    ): [
+        string[],
+        { "temperature": number[], "humidity": number[], "light": number[] }
+    ] {
+        const dayAverages = {
+            "temperature": Array(31).fill(0),
+            "humidity": Array(31).fill(0),
+            "light": Array(31).fill(0)
+        };
+
+        const dayCounts: number[] = Array(31).fill(0);
+
+        for (const data of list) {
+            const day = new Date(data.timestamp).getDate() - 1;
+            dayAverages.humidity[day] += data.humidity;
+            dayAverages.temperature[day] += data.temperature;
+            dayAverages.light[day] += data.light;
+            dayCounts[day]++;
+        }
+
+        const dayNames: string[] = [];
+        for (let i = 1; i <= 31; i++) {
+            dayNames.push(i.toString());
+        }
+
+        for (let i = 0; i < 31; i++) {
+            if (dayCounts[i] !== 0) {
+                dayAverages.humidity[i] /= dayCounts[i];
+                dayAverages.temperature[i] /= dayCounts[i];
+                dayAverages.light[i] /= dayCounts[i];
+            }
+        }
+
+        return [dayNames, dayAverages];
     }
 
 
