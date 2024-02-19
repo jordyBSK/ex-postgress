@@ -42,7 +42,7 @@ try:
 				"light": randint(0, 1000)
 			})
 		requests.post(f"{host}", data=dumps(values))
-		print(f"{datetime.now().isoformat()} {dumps(values, indent=4)}")
+		print(f"{str(datetime.now())[:-5]}: data sent: {dumps(values)}")
 except KeyboardInterrupt:
 	print("Exiting...")
 	exit(0)
