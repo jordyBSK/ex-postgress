@@ -7,6 +7,13 @@ from random import randint
 from json import dumps
 from datetime import datetime
 from sys import argv
+from os import system, name
+
+if name == "nt":
+	def cls(): system("cls")
+else: 
+	def cls(): system("clear")
+def average(data: list): return sum(data) / len(data)
 
 # verify that the correct amount of arguments are given
 if len(argv) < 2 | len(argv) > 4:
@@ -16,9 +23,10 @@ if len(argv) < 2 | len(argv) > 4:
 # store the given arguments
 host = argv[1]
 amount = int(argv[2]) if len(argv) > 2 else 1
-interval = int(argv[3]) if len(argv) > 3 else 60
 
+cls()
 input(f"Simulating {amount} devices sending data to {host} every {interval} seconds\nPress enter to start...")
+cls()
 
 # simulate the devices
 try:
