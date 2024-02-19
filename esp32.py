@@ -26,6 +26,7 @@ interval = int(argv[3]) if len(argv) > 3 else 60
 
 # create display variables
 i = 0
+times = []
 
 cls()
 input(f"Simulating {amount} devices sending data to {host} every {interval} seconds\nPress enter to start...")
@@ -44,10 +45,13 @@ try:
 				"humidity": randint(0, 100),
 				"light": randint(0, 1000)
 			})
+		request_start = datetime.now()
+		times.append((datetime.now() - request_start).total_seconds())
 		requests.post(f"{host}", data={"data": dumps(values)})
 		# display the data
 		print(i := i + 1)
 		print(f"{str(datetime.now())[:-5]}: data sent: {dumps(values)}")
+		print(f"Average request time: {average(times)} seconds\n")
 except KeyboardInterrupt:
 	print("Exiting...")
 	exit(0)
