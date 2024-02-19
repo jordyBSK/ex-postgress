@@ -1,13 +1,17 @@
 import './App.css';
-
-
 import {Outlet} from "react-router-dom";
+import SideBarElement from "./components/SideBarElement.tsx";
 
 function App() {
 
     return (
         <>
-            <Outlet />
+
+
+
+            <SideBarElement/>
+
+            <Outlet/>
         </>
     );
 }
