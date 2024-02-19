@@ -45,7 +45,7 @@ try:
 				"humidity": randint(0, 100),
 				"light": randint(0, 1000)
 			})
-		requests.post(f"{host}", data=dumps(values))
+		requests.post(f"{host}", data={"data": "toto"})
 		# display the data
 		print(i := i + 1)
 		print(f"{str(datetime.now())[:-5]}: data sent: {dumps(values)}")
