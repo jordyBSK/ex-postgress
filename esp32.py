@@ -23,6 +23,10 @@ if len(argv) < 2 | len(argv) > 4:
 # store the given arguments
 host = argv[1]
 amount = int(argv[2]) if len(argv) > 2 else 1
+interval = int(argv[3]) if len(argv) > 3 else 60
+
+# create display variables
+i = 0
 
 cls()
 input(f"Simulating {amount} devices sending data to {host} every {interval} seconds\nPress enter to start...")
@@ -42,6 +46,8 @@ try:
 				"light": randint(0, 1000)
 			})
 		requests.post(f"{host}", data=dumps(values))
+		# display the data
+		print(i := i + 1)
 		print(f"{str(datetime.now())[:-5]}: data sent: {dumps(values)}")
 except KeyboardInterrupt:
 	print("Exiting...")
