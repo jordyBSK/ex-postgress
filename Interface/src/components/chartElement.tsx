@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from "react";
-import { Chart } from 'chart.js/auto';
+import {useEffect, useRef, useState} from "react";
+import {Chart, ChartEvent, LegendElement, LegendItem} from 'chart.js/auto';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
 Chart.register(zoomPlugin);
 
-export default function ChartElement({ call }: {
+export default function ChartElement({call}: {
     call: (data: {
         "device_id": number,
         "timestamp": number,
@@ -19,7 +19,7 @@ export default function ChartElement({ call }: {
         "temperature": number[],
         "humidity": number[],
         "light": number[]
-    }>({ "temperature": [], "humidity": [], "light": [] });
+    }>({"temperature": [], "humidity": [], "light": []});
 
     const [selectedMonth, setSelectedMonth] = useState<string>('');
 
@@ -78,12 +78,23 @@ export default function ChartElement({ call }: {
                                             }, pinch: {
                                                 enabled: true
                                             },
-                                            mode: 'y' ,
+                                            mode: 'y',
                                         }
                                     }
                                 }
                             }
                         });
+
+
+                        newChart.options.onClick = function(event, elements) {
+                            if (elements.length > 0) {
+                                const clickedElement = elements[0];
+                                const index = clickedElement.index;
+                                const monthClicked = names[index];
+                                console.log('Mois cliqué :', monthClicked);
+                            }
+                        };
+
                         setChart(newChart);
                     }
                 }
@@ -98,42 +109,34 @@ export default function ChartElement({ call }: {
             }
         };
     }, [call, chartContainer, chart]);
-
     useEffect(() => {
         if (chart && monthlyAverages.temperature.length > 0 && selectedMonth !== '') {
-            const monthSelect = dateNames.indexOf(selectedMonth);
-
-            const nextMonthIndex = monthSelect < dateNames.length - 1 ? monthSelect + 1 : monthSelect;
-
-            const newData = {
-                labels: dateNames.slice(monthSelect, nextMonthIndex + 1),
+            chart.data = {
+                labels: dateNames,
                 datasets: [
                     {
                         label: 'Temperature',
-                        data: monthlyAverages.temperature.slice(monthSelect, nextMonthIndex + 1),
+                        data: monthlyAverages.temperature,
                         borderColor: 'rgb(255, 99, 132)',
                         tension: 0.1
                     },
                     {
                         label: 'Humidity',
-                        data: monthlyAverages.humidity.slice(monthSelect, nextMonthIndex + 1),
+                        data: monthlyAverages.humidity,
                         borderColor: 'rgb(54, 162, 235)',
                         tension: 0.1
                     },
                     {
                         label: 'Light',
-                        data: monthlyAverages.light.slice(monthSelect, nextMonthIndex + 1),
+                        data: monthlyAverages.light,
                         borderColor: 'rgb(255, 205, 86)',
                         tension: 0.1
                     }
                 ]
             };
-            chart.data = newData;
             chart.update();
         }
     }, [selectedMonth, monthlyAverages, dateNames, chart]);
-
-
 
     const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedMonth(event.target.value);

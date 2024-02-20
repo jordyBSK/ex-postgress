@@ -85,39 +85,37 @@ export default function dashboardElement() {
             "light": number
         }[],
     ): [
-        string[],
+        number[],
         { "temperature": number[], "humidity": number[], "light": number[] }
     ] {
+        const daysInMonth = 31;
         const dayAverages = {
-            "temperature": Array(31).fill(0),
-            "humidity": Array(31).fill(0),
-            "light": Array(31).fill(0)
+            "temperature": new Array<number>(daysInMonth).fill(0),
+            "humidity": new Array<number>(daysInMonth).fill(0),
+            "light": new Array<number>(daysInMonth).fill(0)
         };
-
-        const dayCounts: number[] = Array(31).fill(0);
+        const dayCounts: number[] = new Array<number>(daysInMonth).fill(0);
 
         for (const data of list) {
-            const day = new Date(data.timestamp).getDate() - 1;
-            dayAverages.humidity[day] += data.humidity;
-            dayAverages.temperature[day] += data.temperature;
-            dayAverages.light[day] += data.light;
-            dayCounts[day]++;
+            const date = new Date(data.timestamp);
+            const dayOfMonth = date.getDate() - 1;
+            dayAverages.temperature[dayOfMonth] += data.temperature;
+            dayAverages.humidity[dayOfMonth] += data.humidity;
+            dayAverages.light[dayOfMonth] += data.light;
+            dayCounts[dayOfMonth]++;
         }
 
-        const dayNames: string[] = [];
-        for (let i = 1; i <= 31; i++) {
-            dayNames.push(i.toString());
-        }
-
-        for (let i = 0; i < 31; i++) {
+        for (let i = 0; i < daysInMonth; i++) {
             if (dayCounts[i] !== 0) {
-                dayAverages.humidity[i] /= dayCounts[i];
                 dayAverages.temperature[i] /= dayCounts[i];
+                dayAverages.humidity[i] /= dayCounts[i];
                 dayAverages.light[i] /= dayCounts[i];
             }
         }
 
-        return [dayNames, dayAverages];
+        const dayNumbers: number[] = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+        return [dayNumbers, dayAverages];
     }
 
 
@@ -146,6 +144,7 @@ export default function dashboardElement() {
                 </div>
             </div>
             <ChartElement call={(data) => getMonthAverage(data)}/>
+            <ChartElement call={(data) => getDayAverage(data)}/>
         </>
     )
 }
