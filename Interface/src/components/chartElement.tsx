@@ -4,14 +4,15 @@ import zoomPlugin from 'chartjs-plugin-zoom';
 
 Chart.register(zoomPlugin);
 
-export default function ChartElement({ call }: {
+export default function ChartElement({ call, callable }: {
     call: (data: {
         "device_id": number,
         "timestamp": number,
         "temperature": number,
         "humidity": number,
         "light": number
-    }[]) => [string[] | number[], { "temperature": number[], "humidity": number[], "light": number[] }]
+    }[]) => [(string|number)[] , { "temperature": number[], "humidity": number[], "light": number[] }],
+    callable: (toto: string) => void
 }) {
 
     const [dateNames, setDateNames] = useState<string[]>([]);
@@ -86,7 +87,8 @@ export default function ChartElement({ call }: {
                                         const clickedElement = elements[0];
                                         const index = clickedElement.index;
                                         const monthClicked = names[index];
-                                        setSelectedMonth(monthClicked); // Mise à jour du mois sélectionné
+                                        setSelectedMonth(monthClicked);
+                                        callable(monthClicked)
                                     }
                                 }
                             }
@@ -136,23 +138,10 @@ export default function ChartElement({ call }: {
         }
     }, [selectedMonth, monthlyAverages, dateNames, chart]);
 
-    const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedMonth(event.target.value);
-    };
 
     return (
         <div>
             <canvas ref={chartContainer}></canvas>
-            <div>
-                <label>
-                    <select value={selectedMonth} onChange={handleMonthChange}>
-                        <option value="default">default</option>
-                        {dateNames.map((month, index) => (
-                            <option key={index} value={month}>{month}</option>
-                        ))}
-                    </select>
-                </label>
-            </div>
         </div>
     );
 }

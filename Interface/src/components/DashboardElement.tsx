@@ -2,10 +2,11 @@ import CircularDataElement from "./CircularDataElement.tsx"
 import CardElement from "./cardElement.tsx";
 import ChartElement from "./chartElement.tsx";
 import SideBarElement from "./SideBarElement.tsx";
-import * as moment from "moment";
+import {useState} from "react";
 
 
 export default function dashboardElement() {
+    const monthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     function averageData(
         list: {
@@ -62,8 +63,6 @@ export default function dashboardElement() {
             monthCounts[month]++;
         }
 
-        const monthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
         for (let i = 0; i < 12; i++) {
             if (monthCounts[i] !== 0) {
                 monthAverages.humidity[i] /= monthCounts[i];
@@ -90,7 +89,8 @@ export default function dashboardElement() {
         number[],
         { "temperature": number[], "humidity": number[], "light": number[] }
     ] {
-        const daysInMonth = 31;
+        const daysInMonth = new Date(new Date().getFullYear(), month, 0).getDate();
+
 
         const dayAverages = {
             "temperature": new Array<number>(daysInMonth).fill(0),
@@ -154,8 +154,10 @@ export default function dashboardElement() {
                                                                call={(data) => data[data.length - 1].light}/>}/>
                 </div>
             </div>
-            <ChartElement call={(data) => getMonthAverage(data)}/>
-            <ChartElement call={(data) => getMonthDayAverage(data,5)}/>
+            <ChartElement call={(data) => getMonthAverage(data)} callable={toto => {
+                console.log(monthNames.indexOf(toto))
+            } }/>
+            <ChartElement call={(data) => getMonthDayAverage(data, 5)} callable={toto => {console.log(toto)}}/>
         </>
     )
 }
