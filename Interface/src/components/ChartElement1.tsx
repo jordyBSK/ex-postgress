@@ -4,15 +4,15 @@ import zoomPlugin from 'chartjs-plugin-zoom';
 
 Chart.register(zoomPlugin);
 
-export default function ChartElement({ call, callable }: {
+export default function ChartElement1({ call, callable }: {
     call: (data: {
         "device_id": number,
         "timestamp": number,
         "temperature": number,
         "humidity": number,
         "light": number
-    }[]) => [(string|number)[] , { "temperature": number[], "humidity": number[], "light": number[] }],
-    callable: (toto: string) => void
+    }[]) => [(number | string)[], { "temperature": number[], "humidity": number[], "light": number[] }],
+    callable: (month: string) => void
 }) {
 
     const [dateNames, setDateNames] = useState<string[]>([]);
@@ -22,7 +22,7 @@ export default function ChartElement({ call, callable }: {
         "light": number[]
     }>({ "temperature": [], "humidity": [], "light": [] });
 
-    const [selectedMonth, setSelectedMonth] = useState<string>('');
+    const [selectedMonth, setSelectedMonth] = useState<number[]>('');
 
     const chartContainer = useRef<HTMLCanvasElement>(null);
     const [chart, setChart] = useState<Chart<"line", number[], string>>();
@@ -75,22 +75,27 @@ export default function ChartElement({ call, callable }: {
                                         zoom: {
                                             wheel: {
                                                 enabled: true
-                                            }, pinch: {
+                                            },
+                                            pinch: {
                                                 enabled: true
                                             },
                                             mode: 'y',
                                         }
                                     }
                                 },
-                                onClick: function (event, elements) {
+                                onClick: function (_event, elements) {
                                     if (elements.length > 0) {
                                         const clickedElement = elements[0];
                                         const index = clickedElement.index;
-                                        const monthClicked = names[index];
+                                        const monthClicked : string | number = names[index];
                                         setSelectedMonth(monthClicked);
                                         callable(monthClicked)
+                                        console.log(monthClicked)
+
                                     }
                                 }
+
+
                             }
                         });
 
@@ -107,7 +112,8 @@ export default function ChartElement({ call, callable }: {
                 chart.destroy();
             }
         };
-    }, [call, chartContainer, chart]);
+    }, [call, chartContainer, chart, callable]);
+
 
     useEffect(() => {
         if (chart && monthlyAverages.temperature.length > 0 && selectedMonth !== '') {
