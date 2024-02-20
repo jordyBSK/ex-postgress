@@ -1,17 +1,17 @@
-import {useEffect, useRef, useState} from "react";
-import {Chart, ChartEvent, LegendElement, LegendItem} from 'chart.js/auto';
+import { useEffect, useRef, useState } from "react";
+import { Chart } from 'chart.js/auto';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
 Chart.register(zoomPlugin);
 
-export default function ChartElement({call}: {
+export default function ChartElement({ call }: {
     call: (data: {
         "device_id": number,
         "timestamp": number,
         "temperature": number,
         "humidity": number,
         "light": number
-    }[]) => [string[], { "temperature": number[], "humidity": number[], "light": number[] }]
+    }[]) => [string[] | number[], { "temperature": number[], "humidity": number[], "light": number[] }]
 }) {
 
     const [dateNames, setDateNames] = useState<string[]>([]);
@@ -19,13 +19,12 @@ export default function ChartElement({call}: {
         "temperature": number[],
         "humidity": number[],
         "light": number[]
-    }>({"temperature": [], "humidity": [], "light": []});
+    }>({ "temperature": [], "humidity": [], "light": [] });
 
     const [selectedMonth, setSelectedMonth] = useState<string>('');
 
     const chartContainer = useRef<HTMLCanvasElement>(null);
     const [chart, setChart] = useState<Chart<"line", number[], string>>();
-
 
     useEffect(() => {
         fetch('http://localhost:5174/index.php')
@@ -81,19 +80,17 @@ export default function ChartElement({call}: {
                                             mode: 'y',
                                         }
                                     }
+                                },
+                                onClick: function (event, elements) {
+                                    if (elements.length > 0) {
+                                        const clickedElement = elements[0];
+                                        const index = clickedElement.index;
+                                        const monthClicked = names[index];
+                                        setSelectedMonth(monthClicked); // Mise à jour du mois sélectionné
+                                    }
                                 }
                             }
                         });
-
-
-                        newChart.options.onClick = function(event, elements) {
-                            if (elements.length > 0) {
-                                const clickedElement = elements[0];
-                                const index = clickedElement.index;
-                                const monthClicked = names[index];
-                                console.log('Mois cliqué :', monthClicked);
-                            }
-                        };
 
                         setChart(newChart);
                     }
@@ -109,6 +106,7 @@ export default function ChartElement({call}: {
             }
         };
     }, [call, chartContainer, chart]);
+
     useEffect(() => {
         if (chart && monthlyAverages.temperature.length > 0 && selectedMonth !== '') {
             chart.data = {
@@ -147,7 +145,6 @@ export default function ChartElement({call}: {
             <canvas ref={chartContainer}></canvas>
             <div>
                 <label>
-                    Choisissez le mois :
                     <select value={selectedMonth} onChange={handleMonthChange}>
                         <option value="default">default</option>
                         {dateNames.map((month, index) => (

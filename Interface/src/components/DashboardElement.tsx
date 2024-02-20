@@ -2,6 +2,7 @@ import CircularDataElement from "./CircularDataElement.tsx"
 import CardElement from "./cardElement.tsx";
 import ChartElement from "./chartElement.tsx";
 import SideBarElement from "./SideBarElement.tsx";
+import * as moment from "moment";
 
 
 export default function dashboardElement() {
@@ -76,7 +77,7 @@ export default function dashboardElement() {
         return [monthNames, monthAverages];
     }
 
-    function getDayAverage(
+    function getMonthDayAverage(
         list: {
             "device_id": number,
             "timestamp": number,
@@ -84,11 +85,13 @@ export default function dashboardElement() {
             "humidity": number,
             "light": number
         }[],
+        month: number
     ): [
         number[],
         { "temperature": number[], "humidity": number[], "light": number[] }
     ] {
         const daysInMonth = 31;
+
         const dayAverages = {
             "temperature": new Array<number>(daysInMonth).fill(0),
             "humidity": new Array<number>(daysInMonth).fill(0),
@@ -96,7 +99,13 @@ export default function dashboardElement() {
         };
         const dayCounts: number[] = new Array<number>(daysInMonth).fill(0);
 
-        for (const data of list) {
+
+        const filteredList = list.filter(data => {
+            const date = new Date(data.timestamp);
+            return date.getMonth() === month - 1;
+        });
+
+        for (const data of filteredList) {
             const date = new Date(data.timestamp);
             const dayOfMonth = date.getDate() - 1;
             dayAverages.temperature[dayOfMonth] += data.temperature;
@@ -117,6 +126,8 @@ export default function dashboardElement() {
 
         return [dayNumbers, dayAverages];
     }
+
+
 
 
     return (
@@ -144,7 +155,7 @@ export default function dashboardElement() {
                 </div>
             </div>
             <ChartElement call={(data) => getMonthAverage(data)}/>
-            <ChartElement call={(data) => getDayAverage(data)}/>
+            <ChartElement call={(data) => getMonthDayAverage(data,5)}/>
         </>
     )
 }
