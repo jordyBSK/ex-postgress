@@ -14,6 +14,9 @@ const ChartElement = () => {
     const [temperatures, setTemperatures] = useState<number[]>([])
     const [lights, setLights] = useState<number[]>([])
     const [humidities, setHumiditys] = useState<number[]>([])
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthlyData: { [key: string]: { temperature: number[]; humidity: number[]; light: number[] } } = {};
+
 
     useEffect(() => {
         fetch('http://localhost:5174/index.php')
@@ -28,14 +31,9 @@ const ChartElement = () => {
                 console.error('Une erreur s\'est produite:', error);
             });
     }, []);
-    function getAverageForAllMonth() {
-        const monthlyData: { [key: string]: { temperature: number[]; humidity: number[]; light: number[] } } = {};
-
-        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
+    function initializeMonthlyData() {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
-
 
         for (let year = 2022; year <= currentYear; year++) {
             for (let month = 1; month <= 12; month++) {
@@ -52,19 +50,12 @@ const ChartElement = () => {
             monthlyData[month].humidity.push(entry.humidity);
             monthlyData[month].light.push(entry.light);
         });
-
-
-        for (const month in monthlyData) {
-            const [year, monthNum] = month.split('-');
-            const monthName = monthNames[parseInt(monthNum, 10) - 1];
-            console.log(`Month: ${monthName} ${year}`);
-            console.log('Temperature:', monthlyData[month].temperature);
-            console.log('Humidity:', monthlyData[month].humidity);
-            console.log('Light:', monthlyData[month].light);
-        }
     }
 
-    getAverageForAllMonth();
+
+    initializeMonthlyData();
+
+
 
 
     // useEffect(() => {
