@@ -22,7 +22,6 @@ const ChartElement = () => {
         fetch('http://localhost:5174/index.php')
             .then(response => response.json())
             .then((apiData: Data[]) => {
-                console.log('Données reçues:', apiData);
                 setData(apiData);
 
 
@@ -35,7 +34,7 @@ const ChartElement = () => {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
 
-        for (let year = 2022; year <= currentYear; year++) {
+        for (let year = 2024; year <= currentYear; year++) {
             for (let month = 1; month <= 12; month++) {
                 const monthKey = `${year}-${month.toString().padStart(2, '0')}`;
                 monthlyData[monthKey] = { temperature: [], humidity: [], light: [] };
@@ -52,9 +51,25 @@ const ChartElement = () => {
         });
     }
 
+    function calculateMonthlyAverages() {
+        for (const month in monthlyData) {
+            const [year, monthNum] = month.split('-');
+            const monthName = monthNames[parseInt(monthNum, 10) - 1];
+
+            const temperatureAvg = monthlyData[month].temperature.reduce((acc, val) => acc + val, 0) / monthlyData[month].temperature.length;
+            const humidityAvg = monthlyData[month].humidity.reduce((acc, val) => acc + val, 0) / monthlyData[month].humidity.length;
+            const lightAvg = monthlyData[month].light.reduce((acc, val) => acc + val, 0) / monthlyData[month].light.length;
+
+            console.log(`Month: ${monthName} ${year}`);
+            console.log('Temperature Average:', temperatureAvg);
+            console.log('Humidity Average:', humidityAvg);
+            console.log('Light Average:', lightAvg);
+
+        }
+    }
 
     initializeMonthlyData();
-
+    calculateMonthlyAverages();
 
 
 
