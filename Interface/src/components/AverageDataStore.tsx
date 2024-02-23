@@ -19,7 +19,6 @@ export default function AverageDataStore() {
         fetch('http://localhost:5174/index.php')
             .then(response => response.json())
             .then((apiData: Data[]) => {
-                console.log('Données reçues:', apiData);
                 setData(apiData);
 
 
@@ -41,15 +40,12 @@ export default function AverageDataStore() {
     }, []);
 
     useEffect(() => {
-        console.log("Moyenne de température :", averageTemperature);
     }, [averageTemperature]);
 
     useEffect(() => {
-        console.log("Moyenne d'humidité :", averageHumidity);
     }, [averageHumidity]);
 
     useEffect(() => {
-        console.log("Moyenne de lumière :", averageLight);
     }, [averageLight]);
 
     return (

@@ -147,7 +147,6 @@ export default function ChartElement1({ call, callable }: {
 
     return (
         <div>
-            <canvas ref={chartContainer}></canvas>
         </div>
     );
 }

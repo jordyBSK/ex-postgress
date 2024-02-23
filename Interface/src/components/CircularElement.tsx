@@ -1,15 +1,20 @@
 export default function CircularElement({ data }: { data: number | string }) {
-    if (data === null) {
+    if (data === null || data === undefined) {
         return null;
     }
 
-    const normalizedTemperature = Math.min(Math.max(data, 0), 100);
+
+    const numericData = typeof data === 'string' ? parseFloat(data) : data;
+
+    const normalizedTemperature = Math.min(Math.max(numericData, 0), 100);
+
     const circumference = 2 * Math.PI * 45;
+
     const dashOffset = circumference - (circumference * normalizedTemperature) / 100;
     return (
         <svg className="w-24 h-24" viewBox="0 0 100 100">
             <circle
-                className="bg-blue-800"
+                className="blue-800"
                 cx="50"
                 cy="50"
                 r="45"
