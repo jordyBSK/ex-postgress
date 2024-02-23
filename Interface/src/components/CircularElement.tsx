@@ -1,4 +1,4 @@
-export default function CircularElement({ data }: { data: number | null }) {
+export default function CircularElement({ data }: { data: number | string }) {
     if (data === null) {
         return null;
     }
