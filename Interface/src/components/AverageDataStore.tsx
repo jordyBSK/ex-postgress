@@ -16,7 +16,7 @@ export default function AverageDataStore() {
     const [averageLight, setAverageLight] = useState<string>("0.00");
 
     useEffect(() => {
-        fetch('http://localhost:5174/index.php')
+        fetch('http://192.168.1.66:3000/data')
             .then(response => response.json())
             .then((apiData: Data[]) => {
                 setData(apiData);

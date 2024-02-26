@@ -11,9 +11,6 @@ const ChartElement = () => {
     }
 
     const [data, setData] = useState<Data[]>([]);
-    const [temperatures, setTemperatures] = useState<number[]>([])
-    const [lights, setLights] = useState<number[]>([])
-    const [humidities, setHumiditys] = useState<number[]>([])
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const monthlyData: { [key: string]: { temperature: number[]; humidity: number[]; light: number[] } } = {};
 
