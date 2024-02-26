@@ -1,32 +1,29 @@
 import { useState, useEffect } from 'react';
-import Chart from 'chart.js/auto';
+// import Chart from 'chart.js/auto';
 
-const ChartElement = () => {
+export function ChartElement() {
     interface Data {
-        device_id: number;
         timestamp: number;
         temperature: number;
         humidity: number;
-        light: number;
     }
 
     const [data, setData] = useState<Data[]>([]);
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const monthlyData: { [key: string]: { temperature: number[]; humidity: number[]; light: number[] } } = {};
+    const monthlyData: { [key: string]: { temperature: number[]; humidity: number[] } } = {};
 
 
     useEffect(() => {
-        fetch('http://localhost:5174/index.php')
+        fetch('http://192.168.1.66:3000/data')
             .then(response => response.json())
             .then((apiData: Data[]) => {
                 setData(apiData);
-
-
+                console.log(apiData)
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
             });
-    }, []);
+    },[]);
     function initializeMonthlyData() {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
@@ -34,7 +31,7 @@ const ChartElement = () => {
         for (let year = 2024; year <= currentYear; year++) {
             for (let month = 1; month <= 12; month++) {
                 const monthKey = `${year}-${month.toString().padStart(2, '0')}`;
-                monthlyData[monthKey] = { temperature: [], humidity: [], light: [] };
+                monthlyData[monthKey] = { temperature: [], humidity: [] };
             }
         }
 
@@ -44,7 +41,7 @@ const ChartElement = () => {
 
             monthlyData[month].temperature.push(entry.temperature);
             monthlyData[month].humidity.push(entry.humidity);
-            monthlyData[month].light.push(entry.light);
+
         });
     }
 
@@ -55,18 +52,19 @@ const ChartElement = () => {
 
             const temperatureAvg = monthlyData[month].temperature.reduce((acc, val) => acc + val, 0) / monthlyData[month].temperature.length;
             const humidityAvg = monthlyData[month].humidity.reduce((acc, val) => acc + val, 0) / monthlyData[month].humidity.length;
-            const lightAvg = monthlyData[month].light.reduce((acc, val) => acc + val, 0) / monthlyData[month].light.length;
 
             console.log(`Month: ${monthName} ${year}`);
             console.log('Temperature Average:', temperatureAvg);
             console.log('Humidity Average:', humidityAvg);
-            console.log('Light Average:', lightAvg);
 
         }
     }
 
-    initializeMonthlyData();
-    calculateMonthlyAverages();
+    useEffect(() => {
+        initializeMonthlyData();
+        calculateMonthlyAverages();
+    }, [data]);
+
 
 
 
@@ -130,6 +128,6 @@ const ChartElement = () => {
            {/*<canvas ref={chartRef} width="800" height="400"></canvas>*/}
         </div>
     );
-};
+}
 
 export default ChartElement;

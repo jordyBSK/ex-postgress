@@ -5,7 +5,7 @@ export default function CardElement({element, theme}: { element: ReactNode, them
     return (
         <>
             <div
-                className="rounded-xl h-40 w-64 bg-white shadow-lg">
+                className="rounded-xl h-60 w-72 bg-white shadow-lg">
                 <div className="flex flex-col h-full justify-center items-center">
                     <div className="mt-6 mb-6">
                         {theme}

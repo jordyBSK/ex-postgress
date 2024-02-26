@@ -55,12 +55,6 @@ export default function ChartElement1({ call, callable }: {
                                         data: monthAverages.humidity,
                                         borderColor: 'rgb(54, 162, 235)',
                                         tension: 0.1
-                                    },
-                                    {
-                                        label: 'Light',
-                                        data: monthAverages.light,
-                                        borderColor: 'rgb(255, 205, 86)',
-                                        tension: 0.1
                                     }
                                 ]
                             },

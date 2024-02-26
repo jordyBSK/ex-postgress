@@ -7,7 +7,6 @@ import ChartElement from "./ChartElement.tsx";
 export default function dashboardElement1() {
     return (
         <>
-
             <AverageDataStore/>
             <ChartElement/>
         </>
