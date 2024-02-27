@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Chart from "chart.js/auto";
 import zoomPlugin from 'chartjs-plugin-zoom';
-
 Chart.register(zoomPlugin);
 export function ChartElement({ monthNames, temperatureAverages, humidityAverages }: { monthNames: string[], temperatureAverages: number[], humidityAverages: number[] }) {
     const chartRef = useRef<HTMLCanvasElement>(null);
@@ -42,6 +41,19 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                                 beginAtZero: true
                             }
                         },
+                        plugins: {
+                            zoom: {
+                                zoom: {
+                                    wheel: {
+                                        enabled: true
+                                    },
+                                    pinch: {
+                                        enabled: true
+                                    },
+                                    mode: 'y',
+                                }
+                            }
+                        }
                     }
                 });
             }
