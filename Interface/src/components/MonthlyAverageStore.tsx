@@ -68,7 +68,7 @@ export function MonthlyAverageStore() {
     useEffect(() => {
         initializeMonthlyData();
         calculateMonthlyAverages();
-    }, [calculateMonthlyAverages, data, initializeMonthlyData]);
+    }, [data]);
 
 
     return (
