@@ -1,10 +1,11 @@
-import { useEffect, useRef } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import Chart from "chart.js/auto";
 import zoomPlugin from 'chartjs-plugin-zoom';
 Chart.register(zoomPlugin);
-export function ChartElement({ monthNames, temperatureAverages, humidityAverages }: { monthNames: string[], temperatureAverages: number[], humidityAverages: number[] }) {
+export function ChartElement({ monthNames, temperatureAverages, humidityAverages, monthSelect }: { monthNames: string[] | string, temperatureAverages: number[], humidityAverages: number[], monthSelect: (month: string) => void}) {
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstance = useRef<Chart>();
+    const [selectedMonth, setSelectedMonth] = useState<number[]>();
 
     useEffect(() => {
         if (chartRef && chartRef.current) {
@@ -53,12 +54,20 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                                     mode: 'y',
                                 }
                             }
+                        },   onClick: function (_event, elements) {
+                            if (elements.length > 0) {
+                                const clickedElement = elements[0];
+                                const index = clickedElement.index;
+                                const monthClicked : string | number = monthNames[index];
+                                setSelectedMonth(monthClicked);
+                                monthSelect(monthClicked)
+                            }
                         }
                     }
                 });
             }
         }
-    }, [chartRef, monthNames, temperatureAverages, humidityAverages]);
+    }, [chartRef, monthNames, temperatureAverages, humidityAverages, monthSelect]);
 
     return (
         <div>

@@ -85,15 +85,25 @@ export default function ChartElement1({ call, callable }: {
                                         setSelectedMonth(monthClicked);
                                         callable(monthClicked)
                                         console.log(monthClicked)
-
                                     }
                                 }
-
-
                             }
                         });
 
                         setChart(newChart);
+
+                        // Attachez l'événement onClick à l'élément canvas
+                        chartContainer.current.onclick = function(event) {
+                            const clickedElements = newChart.getElementsAtEventForMode(event, 'point', newChart.options);
+                            if (clickedElements.length > 0) {
+                                const clickedElement = clickedElements[0];
+                                const index = clickedElement.index;
+                                const monthClicked = names[index];
+                                setSelectedMonth(monthClicked);
+                                callable(monthClicked);
+                                console.log(monthClicked);
+                            }
+                        };
                     }
                 }
             })

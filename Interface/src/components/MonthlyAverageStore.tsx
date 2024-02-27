@@ -15,13 +15,13 @@ export function MonthlyAverageStore() {
     const monthlyData: { [key: string]: { temperature: number[]; humidity: number[] } } = {};
     const humidityAverages: number[] = []
     const temperatureAverages: number[] = []
+    const [monthSelected, setMonthSelected] = useState<string>("")
 
     useEffect(() => {
         fetch('http://192.168.1.66:3000/data')
             .then(response => response.json())
             .then((apiData: Data[]) => {
                 setData(apiData);
-                console.log(apiData)
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
@@ -56,10 +56,6 @@ export function MonthlyAverageStore() {
 
             const temperatureAvg = monthlyData[month].temperature.reduce((acc, val) => acc + val, 0) / monthlyData[month].temperature.length;
             const humidityAvg = monthlyData[month].humidity.reduce((acc, val) => acc + val, 0) / monthlyData[month].humidity.length;
-
-            console.log(`Month: ${monthName} ${year}`);
-            console.log('Temperature Average:', temperatureAvg);
-            console.log('Humidity Average:', humidityAvg);
             humidityAverages.push(humidityAvg)
             temperatureAverages.push(temperatureAvg)
         }
@@ -70,11 +66,16 @@ export function MonthlyAverageStore() {
         calculateMonthlyAverages();
     }, [data]);
 
+    const monthSelect = (month: string) => {
+        console.log(month);
+        setMonthSelected(month)
+    };
+
+
 
     return (
         <div>
-            <ChartElement humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
-            {temperatureAverages}
+            <ChartElement monthSelect={monthSelect} humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
         </div>
     );
 }
