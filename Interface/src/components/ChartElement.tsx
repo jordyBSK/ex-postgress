@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef} from 'react';
 import Chart from "chart.js/auto";
 import zoomPlugin from 'chartjs-plugin-zoom';
 Chart.register(zoomPlugin);

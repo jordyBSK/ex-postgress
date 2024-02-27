@@ -11,12 +11,12 @@ interface Data {
 }
 
 export default function AverageDataStore() {
+
     const [data, setData] = useState<Data[]>([]);
     const [averageTemperature, setAverageTemperature] = useState<string>("0.00");
     const [averageHumidity, setAverageHumidity] = useState<string>("0.00");
 
     useEffect(() => {
-        const fetchData = () => {
             fetch('http://192.168.1.66:3000/data')
                 .then(response => response.json())
                 .then((apiData: Data[]) => {
@@ -31,13 +31,6 @@ export default function AverageDataStore() {
                 .catch(error => {
                     console.error('error ', error);
                 });
-        };
-
-        fetchData();
-
-        const interval = setInterval(fetchData, 30000);
-
-        return () => clearInterval(interval);
     }, []);
 
     return (

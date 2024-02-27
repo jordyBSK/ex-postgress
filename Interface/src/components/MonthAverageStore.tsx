@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react';
-import {ChartElement} from "./ChartElement.tsx";
 
 export function MonthAverageStore() {
     interface Data {
@@ -9,7 +8,7 @@ export function MonthAverageStore() {
     }
 
     const [data, setData] = useState<Data[]>([]);
-    const [monthSelected, setMonthSelected] = useState<string>('January');
+    const [monthSelected, setMonthSelected] = useState<string>('March');
     let temperatureAverage = 0;
     let humidityAverage = 0
 
@@ -55,12 +54,6 @@ export function MonthAverageStore() {
 
     return (
         <>
-            <ChartElement
-                monthNames={monthSelected}
-                temperatureAverages={temperatureAverage}
-                humidityAverages={humidityAverage}
-                monthSelect={monthSelect}
-            />
         </>
     );
 }

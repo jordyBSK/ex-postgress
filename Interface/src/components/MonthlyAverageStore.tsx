@@ -47,10 +47,8 @@ export function MonthlyAverageStore() {
         });
     }
 
-
     function calculateMonthlyAverages() {
         for (const month in monthlyData) {
-
 
             const temperatureAvg = monthlyData[month].temperature.reduce((acc, val) => acc + val, 0) / monthlyData[month].temperature.length;
             const humidityAvg = monthlyData[month].humidity.reduce((acc, val) => acc + val, 0) / monthlyData[month].humidity.length;
@@ -74,7 +72,6 @@ export function MonthlyAverageStore() {
     return (
         <div>
             <ChartElement monthSelect={monthSelect} humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
-
         </div>
     );
 }
