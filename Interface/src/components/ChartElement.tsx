@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import Chart from "chart.js/auto";
 import zoomPlugin from 'chartjs-plugin-zoom';
 Chart.register(zoomPlugin);
-export function ChartElement({ monthNames, temperatureAverages, humidityAverages, monthSelect }: { monthNames: string[] | string, temperatureAverages: number[], humidityAverages: number[], monthSelect: (month: string) => void}) {
+export function ChartElement({ monthNames, temperatureAverages, humidityAverages, monthSelect }: { monthNames: string | string[] , temperatureAverages: number[]|number, humidityAverages: number[] |number, monthSelect: (month: string) => void}) {
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstance = useRef<Chart>();
     const [selectedMonth, setSelectedMonth] = useState<number[]>();
