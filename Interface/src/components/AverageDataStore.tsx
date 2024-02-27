@@ -43,7 +43,6 @@ export default function AverageDataStore() {
     return (
         <div className="flex gap-6">
             <CardElement element={<CircularElement color={"red"} data={averageTemperature} unity={"°C"} />} theme={"Temperature Average"}/>
-
             <CardElement element={<CircularElement color={"blue"} data={averageHumidity} unity={"%"} />} theme={"Humidity Average"}/>
         </div>
     );

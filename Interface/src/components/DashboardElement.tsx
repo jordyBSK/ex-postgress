@@ -1,6 +1,6 @@
 
 import AverageDataStore from "./AverageDataStore.tsx";
-import ChartElement from "./ChartElement.tsx";
+import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
 
 
 
@@ -8,7 +8,7 @@ export default function dashboardElement1() {
     return (
         <>
             <AverageDataStore/>
-            <ChartElement/>
+            <MonthlyAverageStore/>
         </>
     )
 }
