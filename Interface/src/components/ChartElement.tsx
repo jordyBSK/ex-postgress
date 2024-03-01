@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import zoomPlugin from 'chartjs-plugin-zoom';
 Chart.register(zoomPlugin);
@@ -6,7 +6,6 @@ Chart.register(zoomPlugin);
 export function ChartElement({ monthNames, temperatureAverages, humidityAverages, monthSelect }: { monthNames: string[] | number[], temperatureAverages: number[] | number, humidityAverages: number[] | number, monthSelect: (month: string) => void }) {
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstance = useRef<Chart>();
-    const [selectedMonth, setSelectedMonth] = useState<number[]>([]);
 
     useEffect(() => {
         if (chartRef && chartRef.current) {
@@ -17,19 +16,22 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                 }
 
                 const labels = Array.isArray(monthNames) ? monthNames : [monthNames];
+                const temperatures = Array.isArray(temperatureAverages) ? temperatureAverages : [temperatureAverages];
+                const humidities = Array.isArray(humidityAverages) ? humidityAverages : [humidityAverages];
+
                 chartInstance.current = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: labels,
                         datasets: [{
                             label: 'Temperature Averages',
-                            data: temperatureAverages,
+                            data: temperatures,
                             borderColor: 'rgb(255, 99, 132)',
                             backgroundColor: 'rgba(255, 99, 132, 0.5)',
                             tension: 0.1
                         }, {
                             label: 'Humidity Averages',
-                            data: humidityAverages,
+                            data: humidities,
                             borderColor: 'rgb(54, 162, 235)',
                             backgroundColor: 'rgba(54, 162, 235, 0.5)',
                             tension: 0.1
@@ -53,12 +55,12 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                                     mode: 'xy',
                                 }
                             }
-                        }, onClick: function (event, elements) {
+                        },
+                        onClick: function (event, elements) {
                             if (elements.length > 0) {
                                 const clickedElement = elements[0];
                                 const index = clickedElement.index;
                                 const monthClicked: string | number = labels[index];
-                                setSelectedMonth(monthClicked);
                                 monthSelect(monthClicked.toString());
                             }
                         }
@@ -66,8 +68,7 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                 });
             }
         }
-
-    }, [monthNames, temperatureAverages, humidityAverages]);
+    }, [monthNames, temperatureAverages, humidityAverages, monthSelect]);
 
     return (
         <div>

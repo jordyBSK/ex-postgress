@@ -1,7 +1,6 @@
-import {useState, useEffect} from 'react';
-import {ChartElement} from "./ChartElement.tsx";
-
-// import Chart from 'chart.js/auto';
+import { useState, useEffect } from 'react';
+import { ChartElement } from "./ChartElement.tsx";
+import MonthAverageStore from "./MonthAverageStore.tsx";
 
 export function MonthlyAverageStore() {
     interface Data {
@@ -11,10 +10,11 @@ export function MonthlyAverageStore() {
     }
 
     const [data, setData] = useState<Data[]>([]);
+    const [select, setSelect] = useState<string>("august");
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const monthlyData: { [key: string]: { temperature: number[]; humidity: number[] } } = {};
-    const humidityAverages: number[] = []
-    const temperatureAverages: number[] = []
+    const humidityAverages: number[] = [];
+    const temperatureAverages: number[] = [];
 
     useEffect(() => {
         fetch('http://192.168.1.66:3000/data')
@@ -27,6 +27,15 @@ export function MonthlyAverageStore() {
             });
     }, []);
 
+    useEffect(() => {
+        initializeMonthlyData();
+        calculateMonthlyAverages();
+    }, [data]);
+
+    useEffect(() => {
+        console.log(select);
+    }, [select]);
+
     function initializeMonthlyData() {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
@@ -34,7 +43,7 @@ export function MonthlyAverageStore() {
         for (let year = 2023; year <= currentYear; year++) {
             for (let month = 1; month <= 12; month++) {
                 const monthKey = `${year}-${month.toString().padStart(2, '0')}`;
-                monthlyData[monthKey] = {temperature: [], humidity: []};
+                monthlyData[monthKey] = { temperature: [], humidity: [] };
             }
         }
 
@@ -49,29 +58,22 @@ export function MonthlyAverageStore() {
 
     function calculateMonthlyAverages() {
         for (const month in monthlyData) {
-
             const temperatureAvg = monthlyData[month].temperature.reduce((acc, val) => acc + val, 0) / monthlyData[month].temperature.length;
             const humidityAvg = monthlyData[month].humidity.reduce((acc, val) => acc + val, 0) / monthlyData[month].humidity.length;
-            humidityAverages.push(humidityAvg)
-            temperatureAverages.push(temperatureAvg)
+            humidityAverages.push(humidityAvg);
+            temperatureAverages.push(temperatureAvg);
         }
     }
 
-    useEffect(() => {
-        initializeMonthlyData();
-        calculateMonthlyAverages();
-    }, [data]);
-
     const monthSelect = (month: string) => {
-        console.log(month);
-
+        setSelect(month);
     };
-
-
 
     return (
         <div>
             <ChartElement monthSelect={monthSelect} humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
+            {select}
+            <MonthAverageStore select={select}/>
         </div>
     );
 }
