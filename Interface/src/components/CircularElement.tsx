@@ -24,7 +24,7 @@ export default function CircularElement({ data, unity,color }: { data: number | 
                 strokeDashoffset={dashOffset}
                 strokeLinecap="round"
             />
-            <text x="50" y="50" textAnchor="middle" dy="0.3em" fontSize="20px">
+            <text x="50" y="50" textAnchor="middle" dy="0.2em" fontSize="18px">
                 {data} {unity}
             </text>
         </svg>

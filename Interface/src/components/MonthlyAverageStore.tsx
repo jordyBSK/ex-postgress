@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChartElement } from "./ChartElement.tsx";
 import MonthAverageStore from "./MonthAverageStore.tsx";
+import CardElement from "./cardElement.tsx";
 
 export function MonthlyAverageStore() {
     interface Data {
@@ -10,7 +11,7 @@ export function MonthlyAverageStore() {
     }
 
     const [data, setData] = useState<Data[]>([]);
-    const [select, setSelect] = useState<string>("august");
+    const [select, setSelect] = useState<string>("January");
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const monthlyData: { [key: string]: { temperature: number[]; humidity: number[] } } = {};
     const humidityAverages: number[] = [];
@@ -32,9 +33,6 @@ export function MonthlyAverageStore() {
         calculateMonthlyAverages();
     }, [data]);
 
-    useEffect(() => {
-        console.log(select);
-    }, [select]);
 
     function initializeMonthlyData() {
         const currentDate = new Date();
@@ -72,8 +70,8 @@ export function MonthlyAverageStore() {
     return (
         <div>
             <ChartElement monthSelect={monthSelect} humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
-            {select}
-            <MonthAverageStore select={select}/>
+
+            <CardElement theme="monthly chart" element={<MonthAverageStore select={select}/>}/>
         </div>
     );
 }

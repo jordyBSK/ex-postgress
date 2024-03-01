@@ -56,19 +56,20 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                                 }
                             }
                         },
-                        onClick: function (event, elements) {
+                        onClick: function (_event, elements) {
                             if (elements.length > 0) {
                                 const clickedElement = elements[0];
                                 const index = clickedElement.index;
                                 const monthClicked: string | number = labels[index];
                                 monthSelect(monthClicked.toString());
+                                console.log()
                             }
                         }
                     }
                 });
             }
         }
-    }, [monthNames, temperatureAverages, humidityAverages, monthSelect]);
+    }, [monthNames, temperatureAverages, humidityAverages]);
 
     return (
         <div>
