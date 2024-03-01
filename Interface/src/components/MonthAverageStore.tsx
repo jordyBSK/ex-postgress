@@ -3,17 +3,14 @@ import { ChartElement } from "./ChartElement.tsx";
 
 export function MonthAverageStore() {
     interface Data {
-        timestamp: number;
+        timestamp: string;
         temperature: number;
         humidity: number;
     }
 
     const [data, setData] = useState<Data[]>([]);
-    const [monthSelected, setMonthSelected] = useState<string>('January');
-    let tempInMonth = [2, 3, 2, 5, 2, 4, 2, 2, 6, 7, 9];
-    let humidInMonth = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-
-    const [dayInMonth, setDayInMonth] = useState<number[]>([]);
+    const [monthSelected, setMonthSelected] = useState<string>('February');
+    const [dailyAverages, setDailyAverages] = useState<{ temperature: number; humidity: number; }[]>([]);
 
     useEffect(() => {
         fetch('http://192.168.1.66:3000/data')
@@ -26,15 +23,6 @@ export function MonthAverageStore() {
             });
     }, []);
 
-    useEffect(() => {
-        const date = new Date();
-        const year = date.getFullYear();
-        const monthIndex = getMonthIndex(monthSelected);
-        const days = daysInMonth(monthIndex, year);
-        const daysArray = Array.from({ length: days }, (_, i) => i + 1);
-        setDayInMonth(daysArray);
-    }, [monthSelected]);
-
     function getMonthIndex(month: string): number {
         const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months.indexOf(month);
@@ -44,14 +32,55 @@ export function MonthAverageStore() {
         return new Date(year, month + 1, 0).getDate();
     }
 
+
+
+    useEffect(() => {
+        if (data.length > 0) {
+            const filteredData = data.filter(entry => {
+                const entryDate = new Date(entry.timestamp);
+                return entryDate.getMonth() === getMonthIndex(monthSelected);
+            });
+
+            const dailyAverages: { temperature: number; humidity: number; }[] = [];
+
+
+            const monthIndex = getMonthIndex(monthSelected);
+            const dayInMonth = daysInMonth(monthIndex, 2024)
+
+            for (let i = 1; i <= dayInMonth; i++) {
+                const entriesForDay = filteredData.filter(entry => {
+                    const entryDate = new Date(entry.timestamp);
+                    return entryDate.getDate() === i;
+                });
+
+                if (entriesForDay.length > 0) {
+                    const totalTemperature = entriesForDay.reduce((number, data) => number + data.temperature, 0);
+                    const totalHumidity = entriesForDay.reduce((number, data) => number + data.humidity, 0);
+                    const averageTemperature = totalTemperature / entriesForDay.length;
+                    const averageHumidity = totalHumidity / entriesForDay.length;
+
+                    dailyAverages.push({ temperature: averageTemperature, humidity: averageHumidity });
+                } else {
+                    dailyAverages.push({ temperature: 0, humidity: 0 });
+                }
+            }
+
+            setDailyAverages(dailyAverages);
+        }
+    }, [data, monthSelected]);
+
+
+
     const monthSelect = (month: string) => {
-        setMonthSelected(month);
+        setMonthSelected("January");
     };
 
     return (
         <>
-            <ChartElement monthNames={dayInMonth} temperatureAverages={tempInMonth}
-                          humidityAverages={tempInMonth} monthSelect={monthSelect} />
+            <ChartElement monthNames={dailyAverages.map((_, index) => index + 1)}
+                          temperatureAverages={dailyAverages.map(entry => entry.temperature)}
+                          humidityAverages={dailyAverages.map(entry => entry.humidity)}
+                          monthSelect={monthSelect} />
         </>
     );
 }
