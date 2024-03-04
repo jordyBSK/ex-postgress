@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { ChartElement } from "./ChartElement.tsx";
 import MonthAverageStore from "./MonthAverageStore.tsx";
 import CardElement from "./cardElement.tsx";
-import CircularElementData from "./CircularElementData.tsx";
 
 export function MonthlyAverageStore() {
     interface Data {
@@ -74,7 +73,6 @@ export function MonthlyAverageStore() {
             <ChartElement monthSelect={monthClicked} humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
 
             <CardElement theme="monthly chart" element={<MonthAverageStore select={select}/>}/>
-            <CircularElementData select={select}/>
         </div>
     );
 }
