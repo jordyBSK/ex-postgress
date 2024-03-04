@@ -21,10 +21,19 @@ export default function CircularElementData() {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     useEffect(() => {
-        fetch('http://192.168.1.66:3000/esp')
-            .then(response => response.json())
-            .then(apiData => setData(apiData))
-            .catch(error => console.error('error ', error));
+        const fetchData = () => {
+            fetch('http://192.168.1.66:3000/data')
+                .then(response => response.json())
+                .then(apiData => setData(apiData))
+                .catch(error => console.error('error ', error));
+        };
+
+        fetchData();
+
+
+        const interval = setInterval(fetchData, 1000);
+
+        return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {
