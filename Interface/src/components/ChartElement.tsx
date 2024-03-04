@@ -62,7 +62,6 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                                 const index = clickedElement.index;
                                 const monthClicked: string | number = labels[index];
                                 monthSelect(monthClicked.toString());
-                                console.log()
                             }
                         }
                     }

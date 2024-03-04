@@ -63,13 +63,14 @@ export function MonthlyAverageStore() {
         }
     }
 
-    const monthSelect = (month: string) => {
+    const monthClicked = (month: string) => {
         setSelect(month);
+
     };
 
     return (
         <div>
-            <ChartElement monthSelect={monthSelect} humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
+            <ChartElement monthSelect={monthClicked} humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
 
             <CardElement theme="monthly chart" element={<MonthAverageStore select={select}/>}/>
         </div>
