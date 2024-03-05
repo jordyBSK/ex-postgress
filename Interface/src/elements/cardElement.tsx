@@ -1,5 +1,14 @@
 import {ReactNode} from "react";
 
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
+
+
 
 export default function CardElement({element, theme}: { element: ReactNode, theme: string }) {
 
@@ -12,12 +21,12 @@ export default function CardElement({element, theme}: { element: ReactNode, them
                     <div className="mt-6 mb-6">
                         {theme}
                     </div>
-                    <image />
+                    <image/>
                     {element}
                 </div>
 
-            </div>
 
+            </div>
 
 
         </>
