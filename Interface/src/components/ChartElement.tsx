@@ -3,7 +3,7 @@ import Chart from "chart.js/auto";
 import zoomPlugin from 'chartjs-plugin-zoom';
 Chart.register(zoomPlugin);
 
-export function ChartElement({ monthNames, temperatureAverages, humidityAverages, monthSelect }: { monthNames: string[] | number[], temperatureAverages: number[] | number, humidityAverages: number[] | number, monthSelect: (month: string) => void }) {
+export function ChartElement({ monthNames, temperatureAverages, humidityAverages}: { monthNames: string[] | number[], temperatureAverages: number[] | number, humidityAverages: number[] | number}) {
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstance = useRef<Chart>();
 
@@ -56,14 +56,14 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                                 }
                             }
                         },
-                        onClick: function (_event, elements) {
-                            if (elements.length > 0) {
-                                const clickedElement = elements[0];
-                                const index = clickedElement.index;
-                                const monthClicked: string | number = labels[index];
-                                monthSelect(monthClicked.toString());
-                            }
-                        }
+                        // onClick: function (_event, elements) {
+                        //     if (elements.length > 0) {
+                        //         const clickedElement = elements[0];
+                        //         const index = clickedElement.index;
+                        //         const monthClicked: string | number = labels[index];
+                        //         monthSelect(monthClicked.toString());
+                        //     }
+                        // }
                     }
                 });
             }
@@ -72,7 +72,7 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
 
     return (
         <div>
-            <canvas ref={chartRef} width="600" height="400"></canvas>
+            <canvas ref={chartRef} className="h-96"></canvas>
         </div>
     );
 }

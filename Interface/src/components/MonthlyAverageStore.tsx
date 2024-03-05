@@ -3,7 +3,7 @@ import { ChartElement } from "./ChartElement.tsx";
 import MonthAverageStore from "./MonthAverageStore.tsx";
 import CardElement from "./cardElement.tsx";
 
-export function MonthlyAverageStore() {
+export function MonthlyAverageStore({month}:{month:string}) {
     interface Data {
         timestamp: number;
         temperature: number;
@@ -63,16 +63,10 @@ export function MonthlyAverageStore() {
         }
     }
 
-    const monthClicked = (month: string) => {
-        setSelect(month);
-
-    };
-
     return (
         <div>
-            <ChartElement monthSelect={monthClicked} humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
-
-            <CardElement theme="monthly chart" element={<MonthAverageStore select={select}/>}/>
+            <CardElement theme={month + " Chart"} element={<MonthAverageStore select={month}/>}/>
+            <CardElement theme="monthly chart" element={<ChartElement humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/> }/>
         </div>
     );
 }

@@ -10,13 +10,12 @@ interface Data {
     light: number;
 }
 
-export default function CircularElementData() {
+export default function CircularElementData({month}:{month:string}) {
     const [data, setData] = useState<Data[]>([]);
     const [averageTemperature, setAverageTemperature] = useState<string>("0.00");
     const [averageHumidity, setAverageHumidity] = useState<string>("0.00");
     const [lastTemperature, setLastTemperature] = useState<number>(0);
     const [lastHumidity, setLastHumidity] = useState<number>(0);
-    const [monthSelected, setMonthSelected] = useState<string>("January");
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -40,7 +39,7 @@ export default function CircularElementData() {
         if (data.length > 0) {
             const monthData = data.filter(item => {
                 const date = new Date(item.timestamp);
-                return date.getMonth() === monthNames.indexOf(monthSelected);
+                return date.getMonth() === monthNames.indexOf(month);
             });
 
             if (monthData.length > 0) {
@@ -67,40 +66,19 @@ export default function CircularElementData() {
                 setLastHumidity(lastDataHumidity);
             }
         }
-    }, [monthSelected, data, monthNames]);
+    }, [month, data, monthNames]);
 
-    const handleMonthClick = (month: string) => {
-        setMonthSelected(month);
-    };
+
 
     return (
         <div>
-            <div className="grid grid-cols-3 items-center gap-8 mb-12">
-                <div className="col-span-2">
-                    <nav
-                        className="fixed w-full top-0 start-0 ">
-                        <div className="max-w-screen-xl mx-auto">
-                            <div className="flex justify-center p-4">
-                                <ul className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 font-medium rounded-lg bg-blue-50">
-                                    {monthNames.map(month => (
-                                        <li className="block py-2 px-3 text-black rounded"
-                                            key={month}
-                                            onClick={() => handleMonthClick(month)}>
-                                            {month}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </div>
+
             <div className="flex gap-6">
 
                 <CardElement element={<CircularElement color={"red"} data={averageTemperature} unity={"°C"}/>}
-                             theme={`${monthSelected} Temperature Average`}/>
+                             theme={`${month} Temperature Average`}/>
                 <CardElement element={<CircularElement color={"blue"} data={averageHumidity} unity={"%"}/>}
-                             theme={`${monthSelected} Humidity Average`}/>
+                             theme={`${month} Humidity Average`}/>
                 <CardElement element={<CircularElement color={"blue"} data={lastHumidity} unity={"%"}/>}
                              theme="Humidity"/>
                 <CardElement element={<CircularElement color={"red"} data={lastTemperature} unity={"°C"}/>}

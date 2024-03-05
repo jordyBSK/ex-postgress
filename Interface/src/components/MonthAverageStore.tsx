@@ -70,16 +70,12 @@ export function MonthAverageStore({select}:{select:string}) {
         }
     }, [data, monthSelected]);
 
-    const monthSelect = (month: string) => {
-        return month
-    };
-
 
     return (
         <>
             <ChartElement monthNames={dailyAverages.map((_, index) => index + 1)}
                           temperatureAverages={dailyAverages.map(entry => entry.temperature)}
-                          humidityAverages={dailyAverages.map(entry => entry.humidity)}  monthSelect={monthSelect}/>
+                          humidityAverages={dailyAverages.map(entry => entry.humidity)} />
         </>
     );
 }
