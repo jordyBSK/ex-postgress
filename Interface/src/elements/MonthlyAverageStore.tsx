@@ -1,31 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { ChartElement } from "./ChartElement.tsx";
 import MonthAverageStore from "./MonthAverageStore.tsx";
 import CardElement from "./CardElement.tsx";
 
-export function MonthlyAverageStore({month}:{month:string}) {
-    interface Data {
-        timestamp: number;
-        temperature: number;
-        humidity: number;
-    }
+interface Data {
+    timestamp: number;
+    temperature: number;
+    humidity: number;
+}
+export function MonthlyAverageStore({month, data}:{month:string, data: Data[]}) {
 
-    const [data, setData] = useState<Data[]>([]);
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const monthlyData: { [key: string]: { temperature: number[]; humidity: number[] } } = {};
     const humidityAverages: number[] = [];
     const temperatureAverages: number[] = [];
-
-    useEffect(() => {
-        fetch('http://192.168.1.66:3000/data')
-            .then(response => response.json())
-            .then((apiData: Data[]) => {
-                setData(apiData);
-            })
-            .catch(error => {
-                console.error('Une erreur s\'est produite:', error);
-            });
-    }, []);
 
     useEffect(() => {
         initializeMonthlyData();
@@ -64,8 +52,8 @@ export function MonthlyAverageStore({month}:{month:string}) {
 
     return (
         <div>
-            <CardElement theme={month + " Chart"} element={<MonthAverageStore select={month}/>}/>
-            <CardElement theme="monthly chart" element={<ChartElement humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/> }/>
+            <CardElement description={month} theme={"Chart"} element={<MonthAverageStore select={month}/>}/>
+            <CardElement  description="2024" theme="yearly chart" element={<ChartElement humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/> }/>
         </div>
     );
 }

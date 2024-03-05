@@ -80,9 +80,10 @@ export default function CircularElementData({month}:{month:string}) {
                 <CardElement element={<CircularElement color={"blue"} data={averageHumidity} unity={"%"}/>}
                              theme="Humidity Average" description={month}/>
                 <CardElement element={<CircularElement color={"blue"} data={lastHumidity} unity={"%"}/>}
-                             theme="Humidity"/>
+
+                             description="last data" theme="Humidity"/>
                 <CardElement element={<CircularElement color={"red"} data={lastTemperature} unity={"°C"}/>}
-                             theme="Temperature"/>
+                             description="last data" theme="Temperature"/>
             </div>
         </div>
     );

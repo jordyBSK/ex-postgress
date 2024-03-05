@@ -1,20 +1,40 @@
 import CircularElementData from "./CircularElementData.tsx";
 import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 
-export default function dashboardElement() {
+export default function DashboardElement() {
     const [monthSelected, setMonthSelected] = useState<string>("January");
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+    interface Data {
+        timestamp: number;
+        temperature: number;
+        humidity: number;
+        id: string;
+    }
+
+    const [data, setData] = useState<Data[]>([]);
+
+    useEffect(() => {
+        fetch('http://192.168.1.66:3000/data')
+            .then(response => response.json())
+            .then((apiData: Data[]) => {
+                setData(apiData);
+                console.log("s")
+            })
+            .catch(error => {
+                console.error('Une erreur s\'est produite:', error);
+            });
+    }, []);
 
     const handleMonthClick = (month: string) => {
         setMonthSelected(month);
     };
     return (
         <>
-            <div className="grid grid-cols-3 items-center gap-8 mb-12">
+            <div className="items-center gap-8 mb-12 flex-col">
                 <div className="col-span-2">
                     <nav
                         className="fixed w-full top-0 start-0 ">
@@ -33,9 +53,13 @@ export default function dashboardElement() {
                         </div>
                     </nav>
                 </div>
+                <div  >
+                    <CircularElementData month={monthSelected}/>
+                    <MonthlyAverageStore month={monthSelected} data={data}/>
+                </div>
             </div>
-            <CircularElementData month={monthSelected}/>
-            <MonthlyAverageStore month={monthSelected}/>
+
+
         </>
     )
 }
