@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import CircularElement from "./CircularElement.tsx";
-import CardElement from "./cardElement.tsx";
+import CardElement from "./CardElement.tsx";
 
 interface Data {
     device_id: number;
@@ -76,9 +76,9 @@ export default function CircularElementData({month}:{month:string}) {
             <div className="flex gap-6">
 
                 <CardElement element={<CircularElement color={"red"} data={averageTemperature} unity={"°C"}/>}
-                             theme={`${month} Temperature Average`}/>
+                             theme="Temperature Average" description={month}/>
                 <CardElement element={<CircularElement color={"blue"} data={averageHumidity} unity={"%"}/>}
-                             theme={`${month} Humidity Average`}/>
+                             theme="Humidity Average" description={month}/>
                 <CardElement element={<CircularElement color={"blue"} data={lastHumidity} unity={"%"}/>}
                              theme="Humidity"/>
                 <CardElement element={<CircularElement color={"red"} data={lastTemperature} unity={"°C"}/>}

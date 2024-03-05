@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChartElement } from "./ChartElement.tsx";
 import MonthAverageStore from "./MonthAverageStore.tsx";
-import CardElement from "./cardElement.tsx";
+import CardElement from "./CardElement.tsx";
 
 export function MonthlyAverageStore({month}:{month:string}) {
     interface Data {
