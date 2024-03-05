@@ -11,7 +11,6 @@ export function MonthlyAverageStore({month}:{month:string}) {
     }
 
     const [data, setData] = useState<Data[]>([]);
-    const [select, setSelect] = useState<string>("January");
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const monthlyData: { [key: string]: { temperature: number[]; humidity: number[] } } = {};
     const humidityAverages: number[] = [];
