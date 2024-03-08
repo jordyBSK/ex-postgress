@@ -14,9 +14,7 @@ export default function CardElement({element, theme, description}: { element: Re
 
     return (
         <>
-
-
-            <Card className="min-w-72 flex flex-col justify-center items-center">
+            <Card className="min-w-64 flex flex-col justify-center items-center">
                 <CardHeader>
                     <CardTitle>{theme}</CardTitle>
                     <CardDescription>{description}</CardDescription>

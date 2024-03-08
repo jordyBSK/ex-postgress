@@ -21,7 +21,7 @@ export default function CircularElementData({month}:{month:string}) {
 
     useEffect(() => {
         const fetchData = () => {
-            fetch('http://192.168.1.66:3000/data')
+            fetch('http://192.168.1.66:3000/esp')
                 .then(response => response.json())
                 .then(apiData => setData(apiData))
                 .catch(error => console.error('error ', error));
@@ -71,10 +71,7 @@ export default function CircularElementData({month}:{month:string}) {
 
 
     return (
-        <div>
-
-            <div className="flex gap-6">
-
+        <div className="gap-16 flex mt-12 mb-8">
                 <CardElement element={<CircularElement color={"red"} data={averageTemperature} unity={"°C"}/>}
                              theme="Temperature Average" description={month}/>
                 <CardElement element={<CircularElement color={"blue"} data={averageHumidity} unity={"%"}/>}
@@ -84,7 +81,6 @@ export default function CircularElementData({month}:{month:string}) {
                              description="last data" theme="Humidity"/>
                 <CardElement element={<CircularElement color={"red"} data={lastTemperature} unity={"°C"}/>}
                              description="last data" theme="Temperature"/>
-            </div>
         </div>
     );
 }

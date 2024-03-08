@@ -4,9 +4,11 @@ import {useEffect, useState} from "react";
 
 
 export default function DashboardElement() {
-    const [monthSelected, setMonthSelected] = useState<string>("January");
+    const d = new Date();
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    const [monthSelected, setMonthSelected] = useState<string>(monthNames[d.getMonth()]);
 
     interface Data {
         timestamp: number;
@@ -18,11 +20,10 @@ export default function DashboardElement() {
     const [data, setData] = useState<Data[]>([]);
 
     useEffect(() => {
-        fetch('http://192.168.1.66:3000/data')
+        fetch('http://192.168.1.66:3000/esp')
             .then(response => response.json())
             .then((apiData: Data[]) => {
                 setData(apiData);
-                console.log("s")
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
@@ -34,31 +35,29 @@ export default function DashboardElement() {
     };
     return (
         <>
-            <div className="items-center gap-8 mb-12 flex-col">
-                <div className="col-span-2">
-                    <nav
-                        className="fixed w-full top-0 start-0 ">
-                        <div className="max-w-screen-xl mx-auto">
-                            <div className="flex justify-center p-4">
-                                <ul className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 font-medium rounded-lg bg-blue-50">
-                                    {monthNames.map(month => (
-                                        <li className="block py-2 px-3 text-black rounded"
-                                            key={month}
-                                            onClick={() => handleMonthClick(month)}>
-                                            {month}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+            <div className="col-span-2">
+                <nav
+                    className="fixed w-full top-0 start-0 ">
+                    <div className="max-w-screen-xl mx-auto">
+                        <div className="flex justify-center p-4">
+                            <ul className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 font-medium rounded-lg bg-blue-50">
+                                {monthNames.map(month => (
+                                    <li className="block py-2 px-3 text-black rounded"
+                                        key={month}
+                                        onClick={() => handleMonthClick(month)}>
+                                        {month}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                    </nav>
-                </div>
-                <div  >
-                    <CircularElementData month={monthSelected}/>
-                    <MonthlyAverageStore month={monthSelected} data={data}/>
-                </div>
+                    </div>
+                </nav>
             </div>
 
+            <div>
+                <CircularElementData month={monthSelected}/>
+                <MonthlyAverageStore month={monthSelected} data={data}/>
+            </div>
 
         </>
     )

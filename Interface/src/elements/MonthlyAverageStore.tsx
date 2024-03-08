@@ -4,9 +4,9 @@ import MonthAverageStore from "./MonthAverageStore.tsx";
 import CardElement from "./CardElement.tsx";
 
 interface Data {
-    timestamp: number;
     temperature: number;
     humidity: number;
+    timestamp: number;
 }
 export function MonthlyAverageStore({month, data}:{month:string, data: Data[]}) {
 
@@ -25,7 +25,7 @@ export function MonthlyAverageStore({month, data}:{month:string, data: Data[]}) 
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
 
-        for (let year = 2023; year <= currentYear; year++) {
+        for (let year = 2024; year <= currentYear; year++) {
             for (let month = 1; month <= 12; month++) {
                 const monthKey = `${year}-${month.toString().padStart(2, '0')}`;
                 monthlyData[monthKey] = { temperature: [], humidity: [] };
@@ -51,10 +51,10 @@ export function MonthlyAverageStore({month, data}:{month:string, data: Data[]}) 
     }
 
     return (
-        <div>
+        <>
             <CardElement description={month} theme={"Chart"} element={<MonthAverageStore select={month}/>}/>
             <CardElement  description="2024" theme="yearly chart" element={<ChartElement humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/> }/>
-        </div>
+        </>
     );
 }
 

@@ -55,15 +55,7 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                                     mode: 'xy',
                                 }
                             }
-                        },
-                        // onClick: function (_event, elements) {
-                        //     if (elements.length > 0) {
-                        //         const clickedElement = elements[0];
-                        //         const index = clickedElement.index;
-                        //         const monthClicked: string | number = labels[index];
-                        //         monthSelect(monthClicked.toString());
-                        //     }
-                        // }
+                        }
                     }
                 });
             }
