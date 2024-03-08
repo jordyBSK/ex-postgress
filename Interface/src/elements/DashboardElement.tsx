@@ -1,6 +1,7 @@
 import CircularElementData from "./CircularElementData.tsx";
 import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
 import {useEffect, useState} from "react";
+import DateRangeElement from "@/elements/DateRangeElement.tsx";
 
 
 export default function DashboardElement() {
@@ -21,7 +22,7 @@ export default function DashboardElement() {
 
     useEffect(() => {
         const fetchData = () => {
-            fetch('http://192.168.1.66:3000/esp')
+            fetch('http://192.168.1.66:3000/data')
                 .then(response => response.json())
                 .then(apiData => setData(apiData))
                 .catch(error => console.error('error ', error));
@@ -62,7 +63,7 @@ export default function DashboardElement() {
                 <CircularElementData month={monthSelected} data={data}/>
                 <MonthlyAverageStore month={monthSelected} data={data}/>
             </div>
-
+<DateRangeElement data={data}/>
         </>
     )
 }
