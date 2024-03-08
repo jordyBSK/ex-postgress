@@ -20,14 +20,18 @@ export default function DashboardElement() {
     const [data, setData] = useState<Data[]>([]);
 
     useEffect(() => {
-        fetch('http://192.168.1.66:3000/esp')
-            .then(response => response.json())
-            .then((apiData: Data[]) => {
-                setData(apiData);
-            })
-            .catch(error => {
-                console.error('Une erreur s\'est produite:', error);
-            });
+        const fetchData = () => {
+            fetch('http://192.168.1.66:3000/esp')
+                .then(response => response.json())
+                .then(apiData => setData(apiData))
+                .catch(error => console.error('error ', error));
+        };
+
+        fetchData();
+
+        const interval = setInterval(fetchData, 10000);
+
+        return () => clearInterval(interval);
     }, []);
 
     const handleMonthClick = (month: string) => {
@@ -55,7 +59,7 @@ export default function DashboardElement() {
             </div>
 
             <div>
-                <CircularElementData month={monthSelected}/>
+                <CircularElementData month={monthSelected} data={data}/>
                 <MonthlyAverageStore month={monthSelected} data={data}/>
             </div>
 
