@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import CircularElementData from "./CircularElementData.tsx";
 import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
+import CardElement from "@/elements/CardElement.tsx";
+import {ChartElement} from "@/elements/ChartElement.tsx";
 
 export default function DashboardElement() {
     interface Data {
@@ -17,36 +19,45 @@ export default function DashboardElement() {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [data, setData] = useState<Data[]>([]);
+    const [dateRange, setDateRange] = useState<string[]>([]);
 
+
+    const fetchData = () => {
+        let url = "http://192.168.1.66:3000/seed";
+        if (startDate && endDate) {
+            const startDateISO = startDate.toISOString().split('T')[0];
+            const endDateISO = endDate.toISOString().split('T')[0];
+            url += `?order=timestamp&and=(timestamp.gt.${startDateISO},timestamp.lt.${endDateISO})`
+        }
+        fetch(url)
+            .then(response => response.json())
+            .then(apiData => {
+                setData(apiData);
+                console.log(apiData);
+            })
+            .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
+    };
     useEffect(() => {
-        const fetchData = () => {
-            if (startDate && endDate) {
-                const startDateISO = startDate.toISOString().split('T')[0];
-                const endDateISO = endDate.toISOString().split('T')[0];
-
-                fetch(`http://192.168.1.66:3000/data?order=timestamp&and=(timestamp.gt.${startDateISO},timestamp.lt.${endDateISO})`)
-                    .then(response => response.json())
-                    .then(apiData => {
-                        setData(apiData);
-                    })
-                    .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
-            } else {
-                fetch(`http://192.168.1.66:3000/data`)
-                    .then(response => response.json())
-                    .then(apiData => {
-                        setData(apiData);
-                    })
-                    .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
-            }
-        };
-
         fetchData();
-
-    }, [startDate, endDate]);
+        getDateRange();
+    }, [startDate, endDate,]);
 
     const handleMonthClick = (month: string) => {
         setMonthSelected(month);
     };
+
+    function getDateRange() {
+        if (startDate && endDate) {
+            const dates: string[] = [];
+            const start = new Date(startDate);
+
+            while (start <= endDate) {
+                dates.push(start.toISOString().split('T')[0]);
+                start.setDate(start.getDate() + 1);
+            }
+            setDateRange(dates);
+        }
+    }
 
     return (
         <>
@@ -68,25 +79,29 @@ export default function DashboardElement() {
                 </nav>
             </div>
 
-
-            <div className="flex justify-center mt-12 gap-6">
-                <div>
-                    <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
-                           value={endDate ? endDate.toISOString().split('T')[0] : ''}
-                           onChange={e => setEndDate(new Date(e.target.value))}/>
-                </div>
-
+            <div className="flex justify-center text-center align-middle mt-12 gap-6">
                 <div>
                     <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
                            value={startDate ? startDate.toISOString().split('T')[0] : ''}
                            onChange={e => setStartDate(new Date(e.target.value))}/>
                 </div>
 
+                <div>
+                    <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
+                           value={endDate ? endDate.toISOString().split('T')[0] : ''}
+                           onChange={e => setEndDate(new Date(e.target.value))}/>
+                </div>
             </div>
 
             <div>
                 <CircularElementData month={monthSelected} data={data}/>
                 <MonthlyAverageStore month={monthSelected} data={data}/>
+                <CardElement
+                    description={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
+                    theme="Chart"
+                    element={<ChartElement  monthNames={dateRange}/>}
+                />
+
             </div>
         </>
     )

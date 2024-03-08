@@ -14,7 +14,7 @@ export function MonthAverageStore({select}:{select:string}) {
     const [dailyAverages, setDailyAverages] = useState<{ temperature: number; humidity: number; }[]>([]);
 
     useEffect(() => {
-        fetch('http://192.168.1.66:3000/data')
+        fetch('http://192.168.1.66:3000/seed')
             .then(response => response.json())
             .then((apiData: Data[]) => {
                 setData(apiData);

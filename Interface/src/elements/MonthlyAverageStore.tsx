@@ -53,6 +53,7 @@ export function MonthlyAverageStore({month, data}:{month:string, data: Data[]}) 
     return (
         <>
             <CardElement description={month} theme={"Chart"} element={<MonthAverageStore select={month}/>}/>
+
             <CardElement  description="2024" theme="yearly chart" element={<ChartElement humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/> }/>
         </>
     );
