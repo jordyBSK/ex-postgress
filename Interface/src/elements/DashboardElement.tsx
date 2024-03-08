@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import CircularElementData from "./CircularElementData.tsx";
 import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
-import DateRangeElement from "@/elements/DateRangeElement.tsx";
 
 export default function DashboardElement() {
+    interface Data {
+        timestamp: number;
+        temperature: number;
+        humidity: number;
+    }
+
     const d = new Date();
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -11,7 +16,6 @@ export default function DashboardElement() {
 
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
-    const [dateRange, setDateRange] = useState<string[]>([]);
     const [data, setData] = useState<Data[]>([]);
 
     useEffect(() => {
@@ -23,20 +27,16 @@ export default function DashboardElement() {
                 fetch(`http://192.168.1.66:3000/data?order=timestamp&and=(timestamp.gt.${startDateISO},timestamp.lt.${endDateISO})`)
                     .then(response => response.json())
                     .then(apiData => {
-                        console.log('Données de l\'API :', apiData);
                         setData(apiData);
                     })
                     .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
-            }
-            else {
+            } else {
                 fetch(`http://192.168.1.66:3000/data`)
-                .then(response => response.json())
-                .then(apiData => {
-                    console.log('Données de l\'API :', apiData);
-                    setData(apiData);
-                })
-                .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
-
+                    .then(response => response.json())
+                    .then(apiData => {
+                        setData(apiData);
+                    })
+                    .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
             }
         };
 
@@ -68,15 +68,20 @@ export default function DashboardElement() {
                 </nav>
             </div>
 
-            <div className="mt-96">
-                <label>Date de début :</label>
-                <input type="date" value={startDate ? startDate.toISOString().split('T')[0] : ''}
-                       onChange={e => setStartDate(new Date(e.target.value))}/>
-            </div>
-            <div>
-                <label>Date de fin :</label>
-                <input type="date" value={endDate ? endDate.toISOString().split('T')[0] : ''}
-                       onChange={e => setEndDate(new Date(e.target.value))}/>
+
+            <div className="flex justify-center mt-12 gap-6">
+                <div>
+                    <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
+                           value={endDate ? endDate.toISOString().split('T')[0] : ''}
+                           onChange={e => setEndDate(new Date(e.target.value))}/>
+                </div>
+
+                <div>
+                    <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
+                           value={startDate ? startDate.toISOString().split('T')[0] : ''}
+                           onChange={e => setStartDate(new Date(e.target.value))}/>
+                </div>
+
             </div>
 
             <div>
