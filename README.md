@@ -15,3 +15,13 @@ This also run adminer on port 8080 wich is a web interface to manage the databas
 ```bash
 docker-compose -f backend/docker-compose.yml up
 ```
+### Adminer
+You can access adminer by going to `localhost:8080` in your web browser
+You can then connect to the database with the following credentials
+```
+System: PostgreSQL
+Server: db
+Username: postgres
+Password: postgres
+Database: memoires-info
+```
