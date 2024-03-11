@@ -122,7 +122,21 @@ export default function DashboardElement() {
             </div>
 
             <div>
-                <CircularElementData dateRange={ `${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`} month={monthSelected} data={data}/>
+                {startDate && endDate ? (
+                    <CircularElementData
+                        dateRange={`${startDate.toDateString()} to ${endDate.toDateString()}`}
+                        month={monthSelected}
+                        data={data}
+                    />
+                ) : (
+                    <CircularElementData
+                        dateRange={monthSelected}
+                        month={monthSelected}
+                        data={data}
+                    />
+                )}
+
+
                 <CardElement
                     description={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
                     theme="Chart"
