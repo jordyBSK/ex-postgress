@@ -27,6 +27,13 @@ export default function DashboardElement() {
     useEffect(() => {
         fetchData();
         calculateDateRange();
+
+        const interval = setInterval(() => {
+            fetchData();
+            calculateDateRange();
+        }, 30000);     43
+
+        return () => clearInterval(interval);
     }, [startDate, endDate]);
 
     useEffect(() => {
