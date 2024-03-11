@@ -12,6 +12,7 @@ psql -h localhost -U postgres -d memoires-info -a -f backend/init.sql
 Once the database is created, you can start the docker container in the backend folder 
 This will run the database on port 5432
 This also run adminer on port 8080 wich is a web interface to manage the database
+This also run a postg rest server on port 3000
 ```bash
 docker-compose -f backend/docker-compose.yml up
 ```
@@ -25,3 +26,7 @@ Username: postgres
 Password: postgres
 Database: memoires-info
 ```
+### Postgrest
+Postg rest is an api used to push and pull data from the database
+get request can be made to pull data from the database and post request can be made to push data to the database
+You can look at the database's content by going to `localhost:3000/data` in your web browser
