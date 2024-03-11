@@ -1,0 +1,130 @@
+esphome:
+  name: example
+  friendly_name: example
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "xxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+ota:
+  password: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "example Fallback Hotspot"
+    password: "xxxxxxxxxxxx"
+
+captive_portal:
+    
+i2c:
+  sda: 21
+  scl: 22
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: aht10
+    temperature:
+      id: temperature
+      name: "AHT10 Temperature"
+    humidity:
+      id: humidity
+      name: "AHT10 Humidity"
+    update_interval: 10s
+  - platform: wifi_signal
+    id: wifi_strength
+    name: "WiFi Signal Sensor"
+    update_interval: 10s
+    
+font:
+  - file: 'Comic_Sans_MS.ttf'
+    id: font1
+    size: 16
+  - file: 'Comic_Sans_MS.ttf'
+    id: font2
+    size: 8
+
+graph:
+  - id: temperature_graph
+    sensor: temperature
+    duration: 60min
+    x_grid: 5min
+    y_grid: 5.0 
+    width: 151
+    height: 51
+  - id: humidity_graph
+    sensor: humidity
+    duration: 60min
+    x_grid: 5min
+    y_grid: 5.0
+    width: 151
+    height: 51
+  
+spi:
+  clk_pin: 18
+  mosi_pin: 23
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      id: ip_address
+      name: ESP IP Address
+
+display:
+  - platform: waveshare_epaper
+    cs_pin: 5
+    dc_pin: 17
+    busy_pin: 4
+    reset_pin: 16
+    model: 2.13in-ttgo-dke
+    full_update_every: 10
+    update_interval: 10s
+    rotation: 90
+    lambda: |-
+      it.printf(0, 25, id(font1), "%5.2f °C", id(temperature).state);
+      it.graph(80, 10, id(temperature_graph));
+      it.printf(0, 80, id(font1), "%5.2f %%", id(humidity).state);
+      it.graph(80, 65, id(humidity_graph));
+      it.strftime(133, 117, id(font2), "%d-%b-%Y %H:%M UTC", id(current_time).now());
+      it.printf(6,117, id(font2), "%3.0f dBm - IP %s", id(wifi_strength).state, id(ip_address).state.c_str());
+#      it.print(0, 0, id(font1), "Hello World!");
+#      it.printf(0, 0, id(font1), "Timestamp: %.1f°C, Humidity: %.1f%%", id(temperature).state, id(humidity).state);
+
+# Initialize http client
+http_request:
+  useragent: esphome/device
+  id: http_request_data
+  timeout: 10s
+
+time:
+  - platform: sntp
+    id: current_time
+    on_time:
+      - seconds: 10
+        then:
+          - http_request.post:
+              url: !secret webhook_url
+              verify_ssl: false
+              headers:
+                Content-Type: application/json
+              json: |-
+                root["humidity"] = id(humidity).state;
+                root["temperature"] = id(temperature).state;
+                root["id"] = id(ip_address).state;
+              #  root["timestamp"] = id(current_time).now();
+              # auth:
+              #   username: !secret webhook_username
+              #   password: !secret webhook_password
