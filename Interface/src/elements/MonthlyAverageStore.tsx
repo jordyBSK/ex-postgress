@@ -1,25 +1,34 @@
-import { useEffect } from 'react';
 import { ChartElement } from "./ChartElement.tsx";
-import MonthAverageStore from "./MonthAverageStore.tsx";
-import CardElement from "./CardElement.tsx";
+
+import {useEffect, useState} from "react";
 
 interface Data {
     temperature: number;
     humidity: number;
     timestamp: number;
 }
-export function MonthlyAverageStore({month, data}:{month:string, data: Data[]}) {
+export function MonthlyAverageStore() {
+
+    const [data, setData] = useState<Data[]>([]);
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const monthlyData: { [key: string]: { temperature: number[]; humidity: number[] } } = {};
     const humidityAverages: number[] = [];
     const temperatureAverages: number[] = [];
 
-    useEffect(() => {
-        initializeMonthlyData();
-        calculateMonthlyAverages();
-    }, [data]);
 
+
+
+    useEffect(() => {
+        fetch('http://192.168.1.66:3000/seed')
+            .then(response => response.json())
+            .then((apiData: Data[]) => {
+                setData(apiData);
+            })
+            .catch(error => {
+                console.error('Une erreur s\'est produite:', error);
+            });
+    }, []);
 
     function initializeMonthlyData() {
         const currentDate = new Date();
@@ -50,11 +59,14 @@ export function MonthlyAverageStore({month, data}:{month:string, data: Data[]}) 
         }
     }
 
+    initializeMonthlyData();
+    calculateMonthlyAverages();
+
     return (
         <>
-            <CardElement description={month} theme={"Chart"} element={<MonthAverageStore select={month}/>}/>
 
-            <CardElement  description="2024" theme="yearly chart" element={<ChartElement humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/> }/>
+
+            <ChartElement humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
         </>
     );
 }

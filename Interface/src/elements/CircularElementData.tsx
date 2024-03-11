@@ -8,7 +8,7 @@ interface Data {
     humidity: number;
 }
 
-export default function CircularElementData({month, data}:{month:string, data: Data[]}) {
+export default function CircularElementData({month, data,dateRange}:{month:string, data: Data[],dateRange:string}) {
     const [averageTemperature, setAverageTemperature] = useState<string>("0.00");
     const [averageHumidity, setAverageHumidity] = useState<string>("0.00");
     const [lastTemperature, setLastTemperature] = useState<number>(0);
@@ -54,9 +54,9 @@ export default function CircularElementData({month, data}:{month:string, data: D
     return (
         <div className="gap-16 flex mt-12 mb-8">
                 <CardElement element={<CircularElement color={"red"} data={averageTemperature} unity={"°C"}/>}
-                             theme="Temperature Average" description={month}/>
+                             theme="Temperature Average" description={dateRange}/>
                 <CardElement element={<CircularElement color={"blue"} data={averageHumidity} unity={"%"}/>}
-                             theme="Humidity Average" description={month}/>
+                             theme="Humidity Average" description={dateRange}/>
                 <CardElement element={<CircularElement color={"blue"} data={lastHumidity} unity={"%"}/>}
 
                              description="last data" theme="Humidity"/>

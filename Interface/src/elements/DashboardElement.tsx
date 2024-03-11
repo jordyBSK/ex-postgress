@@ -1,8 +1,9 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import CircularElementData from "./CircularElementData.tsx";
 import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
 import CardElement from "@/elements/CardElement.tsx";
-import {ChartElement} from "@/elements/ChartElement.tsx";
+import { ChartElement } from "@/elements/ChartElement.tsx";
+import MonthAverageStore from "@/elements/MonthAverageStore.tsx";
 
 export default function DashboardElement() {
     interface Data {
@@ -20,7 +21,17 @@ export default function DashboardElement() {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [data, setData] = useState<Data[]>([]);
     const [dateRange, setDateRange] = useState<string[]>([]);
+    const [humidityAverages, setHumidityAverages] = useState<number[]>([]);
+    const [temperatureAverages, setTemperatureAverages] = useState<number[]>([]);
 
+    useEffect(() => {
+        fetchData();
+        calculateDateRange();
+    }, [startDate, endDate]);
+
+    useEffect(() => {
+        calculateAverages();
+    }, [data, dateRange]);
 
     const fetchData = () => {
         let url = "http://192.168.1.66:3000/seed";
@@ -37,16 +48,8 @@ export default function DashboardElement() {
             })
             .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
     };
-    useEffect(() => {
-        fetchData();
-        getDateRange();
-    }, [startDate, endDate,]);
 
-    const handleMonthClick = (month: string) => {
-        setMonthSelected(month);
-    };
-
-    function getDateRange() {
+    const calculateDateRange = () => {
         if (startDate && endDate) {
             const dates: string[] = [];
             const start = new Date(startDate);
@@ -58,6 +61,31 @@ export default function DashboardElement() {
             setDateRange(dates);
         }
     }
+
+    const calculateAverages = () => {
+        if (data.length === 0 || dateRange.length === 0) return;
+
+        const tempAverages: number[] = new Array(dateRange.length).fill(0);
+        const humAverages: number[] = new Array(dateRange.length).fill(0);
+
+
+        dateRange.forEach((date, index) => {
+            const entriesForDay = data.filter(item => item.timestamp.includes(date));
+            const totalTemperature = entriesForDay.reduce((number, data) => number + data.temperature, 0);
+            const totalHumidity = entriesForDay.reduce((number, data) => number + data.humidity, 0);
+
+            tempAverages[index] = totalTemperature / entriesForDay.length;
+            humAverages[index] = totalHumidity / entriesForDay.length;
+        });
+
+        setTemperatureAverages(tempAverages);
+        setHumidityAverages(humAverages);
+    }
+
+
+    const handleMonthClick = (month: string) => {
+        setMonthSelected(month);
+    };
 
     return (
         <>
@@ -94,13 +122,19 @@ export default function DashboardElement() {
             </div>
 
             <div>
-                <CircularElementData month={monthSelected} data={data}/>
-                <MonthlyAverageStore month={monthSelected} data={data}/>
+                <CircularElementData dateRange={ `${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`} month={monthSelected} data={data}/>
                 <CardElement
                     description={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
                     theme="Chart"
-                    element={<ChartElement  monthNames={dateRange}/>}
+                    element={<ChartElement monthNames={dateRange.slice(0, -1)} humidityAverages={humidityAverages}
+                                           temperatureAverages={temperatureAverages}/>}
                 />
+                <CardElement element={ <MonthAverageStore select={monthSelected}/>} theme={"monthly chart"} description={monthSelected}/>
+
+                <CardElement element={<MonthlyAverageStore />} theme={"2024"} description={"Monthly chart"}/>
+
+
+
 
             </div>
         </>
