@@ -86,6 +86,10 @@ export default function DashboardElement() {
     const handleMonthClick = (month: string) => {
         setMonthSelected(month);
     };
+    useEffect(() => {
+        setStartDate(null);
+        setEndDate(null)
+    }, [monthSelected]);
 
     return (
         <>
