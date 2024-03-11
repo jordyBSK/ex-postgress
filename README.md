@@ -58,3 +58,17 @@ It can take a few minutes to compile and install the firmware, be patient
 Once the installation is done, you can press `STOP` to exit the logs
 You can now unplug the esp32 the computer and plug it to any other power source
 If you need to change the configuration of the esp32, you can now do it wirelessly from the home assistant interface
+
+## Web Interface
+### Installation
+This project uses a react web interface to display the data from the database
+To start the web interface, you can run the following command
+
+```bash
+cd interface
+npm install
+npm run dev
+```
+## Access
+You can then access the web interface by going to `localhost:5174` in your web browser
+![web interface](/assets/dashboard.png)
