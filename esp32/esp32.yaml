@@ -124,7 +124,7 @@ time:
                 root["humidity"] = id(humidity).state;
                 root["temperature"] = id(temperature).state;
                 root["id"] = id(ip_address).state;
-              #  root["timestamp"] = id(current_time).now();
+                root["timestamp"] = id(current_time).now().timestamp;
               # auth:
               #   username: !secret webhook_username
               #   password: !secret webhook_password
