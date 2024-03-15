@@ -1,4 +1,4 @@
-export default function CircularElement({ data, unity,color }: { data: number | string , unity: string, color: string}) {
+export default function CircularElement({data, unity, color}: { data: number | string, unity: string, color: string }) {
     if (data === null || data === undefined) {
         return null;
     }
@@ -12,22 +12,24 @@ export default function CircularElement({ data, unity,color }: { data: number | 
 
     const dashOffset = circumference - (circumference * normalizedTemperature) / 100;
     return (
-        <svg className="w-32 h-32 " viewBox="0 0 100 100">
-            <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke={color}
-                strokeWidth="10"
-                strokeDasharray={circumference}
-                strokeDashoffset={dashOffset}
-                strokeLinecap="round"
-            />
-            <text x="50" y="50" textAnchor="middle" dy="0.2em" fontSize="18px">
+        <div className="flex">
+            <text className="font-bold text-lg mr-28">
                 {data} {unity}
             </text>
-        </svg>
+            <svg className="w-28 h-32 " viewBox="0 0 100 100">
+                <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    fill="none"
+                    stroke={color}
+                    strokeWidth="20"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={dashOffset}
+                />
+            </svg>
+        </div>
+
 
     );
 }

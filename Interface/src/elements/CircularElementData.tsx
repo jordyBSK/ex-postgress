@@ -8,7 +8,11 @@ interface Data {
     humidity: number;
 }
 
-export default function CircularElementData({month, data,dateRange}:{month:string, data: Data[],dateRange:string}) {
+export default function CircularElementData({month, data}: {
+    month: string,
+    data: Data[],
+    dateRange: string
+}) {
     const [averageTemperature, setAverageTemperature] = useState<string>("0.00");
     const [averageHumidity, setAverageHumidity] = useState<string>("0.00");
     const [lastTemperature, setLastTemperature] = useState<number>(0);
@@ -25,7 +29,8 @@ export default function CircularElementData({month, data,dateRange}:{month:strin
 
             if (monthData.length > 0) {
                 const totalTemperature = monthData.reduce((number, data) => {
-                    return number + data.temperature;}, 0);
+                    return number + data.temperature;
+                }, 0);
 
                 const dataSize = monthData.reduce((number, data) => {
                     return data.temperature == null ? number : number + 1;
@@ -50,18 +55,17 @@ export default function CircularElementData({month, data,dateRange}:{month:strin
     }, [month, data, monthNames]);
 
 
-
     return (
-        <div className="gap-16 flex mt-12 mb-8">
-                <CardElement element={<CircularElement color={"red"} data={averageTemperature} unity={"°C"}/>}
-                             theme="Temperature Average" description={dateRange}/>
-                <CardElement element={<CircularElement color={"blue"} data={averageHumidity} unity={"%"}/>}
-                             theme="Humidity Average" description={dateRange}/>
+        <div className="flex gap-10 mb-6 mt-6">
+            <div className="w-80">
                 <CardElement element={<CircularElement color={"blue"} data={lastHumidity} unity={"%"}/>}
+                             theme="Humidity"/>
+            </div>
 
-                             description="last data" theme="Humidity"/>
+            <div className="w-80">
                 <CardElement element={<CircularElement color={"red"} data={lastTemperature} unity={"°C"}/>}
-                             description="last data" theme="Temperature"/>
+                             theme="Temperature"/>
+            </div>
         </div>
     );
 }

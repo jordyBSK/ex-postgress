@@ -64,7 +64,8 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
 
     return (
         <div>
-            <canvas ref={chartRef} className="h-96"></canvas>
+            <canvas ref={chartRef} className="h-64"></canvas>
+
         </div>
     );
 }

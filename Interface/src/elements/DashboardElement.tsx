@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import CircularElementData from "./CircularElementData.tsx";
 import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
 import CardElement from "@/elements/CardElement.tsx";
-import { ChartElement } from "@/elements/ChartElement.tsx";
+import {ChartElement} from "@/elements/ChartElement.tsx";
 import MonthAverageStore from "@/elements/MonthAverageStore.tsx";
 
 export default function DashboardElement() {
@@ -31,7 +31,7 @@ export default function DashboardElement() {
         const interval = setInterval(() => {
             fetchData();
             calculateDateRange();
-        }, 30000);     43
+        }, 60000);
 
         return () => clearInterval(interval);
     }, [startDate, endDate]);
@@ -100,68 +100,78 @@ export default function DashboardElement() {
 
     return (
         <>
-            <div className="col-span-2">
-                <nav className="fixed w-full top-0 start-0">
-                    <div className="max-w-screen-xl mx-auto">
-                        <div className="flex justify-center p-4">
-                            <ul className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 font-medium rounded-lg bg-blue-50">
-                                {monthNames.map(month => (
-                                    <li className="block py-2 px-3 text-black rounded"
-                                        key={month}
-                                        onClick={() => handleMonthClick(month)}>
-                                        {month}
-                                    </li>
-                                ))}
-                            </ul>
+            <div className="w-3/4 justify-center align-middle justify-items-center">
+                <div className="col-span-2">
+                    <nav className="fixed w-full top-0 start-0">
+                        <div className="max-w-screen-xl mx-auto">
+                            <div className="flex justify-center p-4">
+                                <ul className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 font-medium rounded-lg bg-blue-50">
+                                    {monthNames.map(month => (
+                                        <li className="block py-2 px-3 text-black rounded"
+                                            key={month}
+                                            onClick={() => handleMonthClick(month)}>
+                                            {month}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+
+
+                <div>
+
+                    <div className="flex text-center align-middle mt-12 gap-10">
+                        <div>
+                            <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
+                                   value={startDate ? startDate.toISOString().split('T')[0] : ''}
+                                   onChange={e => setStartDate(new Date(e.target.value))}/>
+                        </div>
+
+                        <div>
+                            <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
+                                   value={endDate ? endDate.toISOString().split('T')[0] : ''}
+                                   onChange={e => setEndDate(new Date(e.target.value))}/>
                         </div>
                     </div>
-                </nav>
-            </div>
 
-            <div className="flex justify-center text-center align-middle mt-12 gap-6">
-                <div>
-                    <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
-                           value={startDate ? startDate.toISOString().split('T')[0] : ''}
-                           onChange={e => setStartDate(new Date(e.target.value))}/>
+                    <div className="">
+                        {startDate && endDate ? (
+                            <CircularElementData
+                                dateRange={`${startDate.toDateString()} to ${endDate.toDateString()}`}
+                                month={monthSelected}
+                                data={data}
+                            />
+                        ) : (
+                            <CircularElementData
+                                dateRange={monthSelected}
+                                month={monthSelected}
+                                data={data}
+                            />
+                        )}
+                    </div>
+                    <div className="flex gap-8 mb-12">
+                        <div className="w-1/2">
+                            <CardElement
+                                theme={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
+                                element={<ChartElement monthNames={dateRange.slice(0, -1)}
+                                                       humidityAverages={humidityAverages}
+                                                       temperatureAverages={temperatureAverages}/>}
+                            />
+                        </div>
+                        <div className="w-1/2">
+                            <CardElement element={<MonthAverageStore select={monthSelected}/>}
+                                         theme={`${monthSelected} Chart`}/>
+                        </div>
+                    </div>
+
                 </div>
-
-                <div>
-                    <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
-                           value={endDate ? endDate.toISOString().split('T')[0] : ''}
-                           onChange={e => setEndDate(new Date(e.target.value))}/>
+                <div className="w-full">
+                    <CardElement element={<MonthlyAverageStore/>} theme={"Monthly chart"}/>
                 </div>
             </div>
 
-            <div>
-                {startDate && endDate ? (
-                    <CircularElementData
-                        dateRange={`${startDate.toDateString()} to ${endDate.toDateString()}`}
-                        month={monthSelected}
-                        data={data}
-                    />
-                ) : (
-                    <CircularElementData
-                        dateRange={monthSelected}
-                        month={monthSelected}
-                        data={data}
-                    />
-                )}
-
-
-                <CardElement
-                    description={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
-                    theme="Chart"
-                    element={<ChartElement monthNames={dateRange.slice(0, -1)} humidityAverages={humidityAverages}
-                                           temperatureAverages={temperatureAverages}/>}
-                />
-                <CardElement element={ <MonthAverageStore select={monthSelected}/>} theme={"monthly chart"} description={monthSelected}/>
-
-                <CardElement element={<MonthlyAverageStore />} theme={"2024"} description={"Monthly chart"}/>
-
-
-
-
-            </div>
         </>
     )
 }

@@ -64,8 +64,6 @@ export function MonthlyAverageStore() {
 
     return (
         <>
-
-
             <ChartElement humidityAverages={humidityAverages} temperatureAverages={temperatureAverages} monthNames={monthNames}/>
         </>
     );
