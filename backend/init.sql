@@ -4,7 +4,7 @@ create table api.data (
   temperature real,
   humidity real,
   timestamp timestamp NOT NULL,
-  id character varying(14) NOT NULL
+  ip character varying(14) NOT NULL
 );
 
 -- create autenticator
@@ -20,12 +20,19 @@ grant web_anon to authenticator;
 create or replace function api.insert_data(
 	temperature real,
 	humidity real,
-	id varchar(15),
+	ip varchar(15),
 	unix_timestamp bigint
 ) 
 returns void as $$
-	insert into api.data("temperature", "humidity", "id", "timestamp") values (temperature, humidity, id, to_timestamp(unix_timestamp));
-$$ language sql;
+begin
+	-- if the ip said in the token is not the same as the one in the request, then this means that the user is not who he pretends to be and we should throw an error
+	if (current_setting('request.jwt.claims', true)::json->>'ip' != ip) then
+		raise exception insufficient_privilege
+			using hint = 'You are not who you pretend to be';
+	end if;
+	-- insert the data
+	insert into api.data("temperature", "humidity", "ip", "timestamp") values (temperature, humidity, ip, to_timestamp(unix_timestamp));
+end $$ language plpgsql;
 
 -- create role for the esp 32
 create role esp32 nologin;

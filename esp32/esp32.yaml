@@ -120,7 +120,7 @@ time:
               verify_ssl: false
               headers:
                 Content-Type: application/json
-                Authorization: !secret esp32_token
+                Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
               json: |-
                 root["humidity"] = id(humidity).state;
                 root["temperature"] = id(temperature).state;
