@@ -59,13 +59,20 @@ Once the installation is done, you can press `STOP` to exit the logs
 You can now unplug the esp32 the computer and plug it to any other power source
 If you need to change the configuration of the esp32, you can now do it wirelessly from the home assistant interface
 
+## Data transfer
+Here are 2 diagrams that show how the data is transfered from the esp32 to the web interface
+### Hardware
+![hardware](/assets/hardware-diagram.png)
+### Software
+![software](/assets/software-diagram.png)
+
 ## Web Interface
 ### Installation
 This project uses a react web interface to display the data from the database
 To start the web interface, you can run the following command
 
 ```bash
-cd interface
+cd Interface
 npm install
 npm run dev
 ```
