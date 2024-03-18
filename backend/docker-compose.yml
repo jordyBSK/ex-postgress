@@ -8,10 +8,11 @@ services:
     ports:
       - "3000:3000"
     environment:
+      # this is the equivalent to the postgrest.conf file
       PGRST_DB_SCHEMAS: "api"
       PGRST_DB_ANON_ROLE: "web_anon"
-      PGRST_JWT_SECRET: "POqzkfd1hzwsN46xOI9Jwajmc2ImVWZ2"
       PGRST_DB_URI: postgres://postgres:example@db:5432/memoires-info
+      PGRST_JWT_SECRET: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
       PGRST_OPENAPI_SERVER_PROXY_URI: http://0.0.0.0:3000
     depends_on:
       - db
