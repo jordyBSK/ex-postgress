@@ -3,7 +3,6 @@ import Chart from "chart.js/auto";
 import zoomPlugin from 'chartjs-plugin-zoom';
 Chart.register(zoomPlugin);
 
-
 export function ChartElement({ monthNames, temperatureAverages, humidityAverages}: { monthNames: string[] | number[], temperatureAverages: number[] | number, humidityAverages: number[] | number}) {
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstance = useRef<Chart>();
@@ -11,7 +10,7 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
     useEffect(() => {
         if (chartRef && chartRef.current) {
             const ctx = chartRef.current.getContext("2d");
-
+            if (ctx) {
                 if (chartInstance.current) {
                     chartInstance.current.destroy();
                 }
@@ -60,7 +59,7 @@ export function ChartElement({ monthNames, temperatureAverages, humidityAverages
                     }
                 });
             }
-
+        }
     }, [monthNames, temperatureAverages, humidityAverages]);
 
     return (

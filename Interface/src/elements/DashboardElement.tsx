@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CircularElementData from "./CircularElementData.tsx";
 import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
 import CardElement from "@/elements/CardElement.tsx";
@@ -23,6 +23,7 @@ export default function DashboardElement() {
     const [dateRange, setDateRange] = useState<string[]>([]);
     const [humidityAverages, setHumidityAverages] = useState<number[]>([]);
     const [temperatureAverages, setTemperatureAverages] = useState<number[]>([]);
+
     const [darkTheme, setDarkTheme] = useState<boolean>(false);
 
     useEffect(() => {
@@ -78,13 +79,18 @@ export default function DashboardElement() {
 
 
         dateRange.forEach((date, index) => {
-            const entriesForDay = data.filter(item => item.timestamp.includes(date));
+            const entriesForDay = data.filter(item => {
+                const itemDate = new Date(item.timestamp).toISOString().split('T')[0];
+                return itemDate === date;
+            });
+
             const totalTemperature = entriesForDay.reduce((number, data) => number + data.temperature, 0);
             const totalHumidity = entriesForDay.reduce((number, data) => number + data.humidity, 0);
 
             tempAverages[index] = totalTemperature / entriesForDay.length;
             humAverages[index] = totalHumidity / entriesForDay.length;
         });
+
 
         setTemperatureAverages(tempAverages);
         setHumidityAverages(humAverages);
@@ -106,6 +112,7 @@ export default function DashboardElement() {
     return (
         <>
             <button className="mt-12" onClick={toggleDarkTheme}>{darkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'}</button>
+
             <div className={`w-3/4 justify-center align-middle justify-items-center ${darkTheme ? 'dark-theme' : ''}`}>
                 <div className="col-span-2">
                     <nav className="fixed w-full top-0 start-0">
@@ -128,13 +135,23 @@ export default function DashboardElement() {
                 <div>
                     <div className="flex text-center align-middle mt-12 gap-10">
                         <div>
-                            <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
+                            <input className="bg-white font-bold h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl "
+                                   style={{
+                                       backgroundColor: darkTheme ? '#1D232C' : '#FFF',
+                                       color: darkTheme ? '#FFF' : '#000'
+                                   }}
+                                   type="date"
                                    value={startDate ? startDate.toISOString().split('T')[0] : ''}
                                    onChange={e => setStartDate(new Date(e.target.value))}/>
                         </div>
 
                         <div>
-                            <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
+                            <input className="bg-white font-bold h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl "
+                                   style={{
+                                       backgroundColor: darkTheme ? '#1D232C' : '#FFF',
+                                       color: darkTheme ? '#FFF' : '#000'
+                                   }}
+                                   type="date"
                                    value={endDate ? endDate.toISOString().split('T')[0] : ''}
                                    onChange={e => setEndDate(new Date(e.target.value))}/>
                         </div>
@@ -142,13 +159,14 @@ export default function DashboardElement() {
 
                     <div className="">
                         {startDate && endDate ? (
-                            <CircularElementData
+                            <CircularElementData darkTheme={darkTheme}
                                 dateRange={`${startDate.toDateString()} to ${endDate.toDateString()}`}
                                 month={monthSelected}
                                 data={data}
                             />
                         ) : (
                             <CircularElementData
+                                darkTheme={darkTheme}
                                 dateRange={monthSelected}
                                 month={monthSelected}
                                 data={data}
@@ -157,7 +175,7 @@ export default function DashboardElement() {
                     </div>
                     <div className="flex gap-8 mb-12">
                         <div className="w-1/2">
-                            <CardElement
+                            <CardElement darkTheme={darkTheme}
                                 theme={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
                                 element={<ChartElement monthNames={dateRange.slice(0, -1)}
                                                        humidityAverages={humidityAverages}
@@ -165,7 +183,7 @@ export default function DashboardElement() {
                             />
                         </div>
                         <div className="w-1/2">
-                            <CardElement element={<MonthAverageStore select={monthSelected}/>}
+                            <CardElement darkTheme={darkTheme} element={<MonthAverageStore select={monthSelected}/>}
                                          theme={`${monthSelected} Chart`}/>
                         </div>
                     </div>
