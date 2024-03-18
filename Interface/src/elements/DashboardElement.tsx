@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import CircularElementData from "./CircularElementData.tsx";
 import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
 import CardElement from "@/elements/CardElement.tsx";
-import {ChartElement} from "@/elements/ChartElement.tsx";
+import { ChartElement } from "@/elements/ChartElement.tsx";
 import MonthAverageStore from "@/elements/MonthAverageStore.tsx";
 
 export default function DashboardElement() {
@@ -23,6 +23,7 @@ export default function DashboardElement() {
     const [dateRange, setDateRange] = useState<string[]>([]);
     const [humidityAverages, setHumidityAverages] = useState<number[]>([]);
     const [temperatureAverages, setTemperatureAverages] = useState<number[]>([]);
+    const [darkTheme, setDarkTheme] = useState<boolean>(false);
 
     useEffect(() => {
         fetchData();
@@ -89,18 +90,23 @@ export default function DashboardElement() {
         setHumidityAverages(humAverages);
     }
 
-
     const handleMonthClick = (month: string) => {
         setMonthSelected(month);
     };
+
     useEffect(() => {
         setStartDate(null);
         setEndDate(null)
     }, [monthSelected]);
 
+    const toggleDarkTheme = () => {
+        setDarkTheme(!darkTheme);
+    };
+
     return (
         <>
-            <div className="w-3/4 justify-center align-middle justify-items-center">
+            <button className="mt-12" onClick={toggleDarkTheme}>{darkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'}</button>
+            <div className={`w-3/4 justify-center align-middle justify-items-center ${darkTheme ? 'dark-theme' : ''}`}>
                 <div className="col-span-2">
                     <nav className="fixed w-full top-0 start-0">
                         <div className="max-w-screen-xl mx-auto">
@@ -119,9 +125,7 @@ export default function DashboardElement() {
                     </nav>
                 </div>
 
-
                 <div>
-
                     <div className="flex text-center align-middle mt-12 gap-10">
                         <div>
                             <input className="bg-white h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl " type="date"
@@ -165,13 +169,11 @@ export default function DashboardElement() {
                                          theme={`${monthSelected} Chart`}/>
                         </div>
                     </div>
-
                 </div>
                 <div className="w-full">
-                    <CardElement element={<MonthlyAverageStore/>} theme={"Monthly chart"}/>
+                    <MonthlyAverageStore/>
                 </div>
             </div>
-
         </>
     )
 }

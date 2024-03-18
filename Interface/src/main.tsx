@@ -4,6 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import DashboardElement from "./elements/DashboardElement.tsx";
+import PlanElement from "@/elements/PlanElement.tsx";
 
 const router = createBrowserRouter([
     {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
              element: <DashboardElement/>
             },{
             path:"/plan",
-                element:
+                element:<PlanElement/>
             }
         ]
     },

@@ -3,20 +3,25 @@ export default function CircularElement({data, unity, color}: { data: number | s
         return null;
     }
 
-
     const numericData = typeof data === 'string' ? parseFloat(data) : data;
 
-    const normalizedTemperature = Math.min(Math.max(numericData, 0), 100);
+    const normalizedTemperature = Math.min(Math.max(numericData, -100),100)
 
     const circumference = 2 * Math.PI * 45;
 
-    const dashOffset = circumference - (circumference * normalizedTemperature) / 100;
+    let dashOffset: number;
+    if (normalizedTemperature >= 0) {
+        dashOffset = circumference - (circumference * normalizedTemperature) / 100;
+    } else {
+        dashOffset = circumference + (circumference * normalizedTemperature) / 100;
+    }
+
     return (
         <div className="flex">
-            <text className="font-bold text-lg mr-28">
+            <text className="text-center font-bold text-xl mr-16">
                 {data} {unity}
             </text>
-            <svg className="w-28 h-32 " viewBox="0 0 100 100">
+            <svg className="w-32 h-32 " viewBox="0 0 100 100">
                 <circle
                     cx="50"
                     cy="50"
@@ -29,7 +34,5 @@ export default function CircularElement({data, unity, color}: { data: number | s
                 />
             </svg>
         </div>
-
-
     );
 }
