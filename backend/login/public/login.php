@@ -22,6 +22,13 @@ $dotenv->load(__DIR__ . '/../.env');
 $token = JWT::encode(['role' => 'web_login', 'exp' => time() + 3], $_ENV['JWT_SECRET'], 'HS256');
 $user = callAPI('GET', $_ENV['POSTGREST_API'] . "/users?username=eq.{$data['username']}", [], ["Authorization: Bearer $token"]);
 
+// Check if the answer is valid
+if ($user === false || isset($user["message"]))
+    output(['error' => 'Unknown error'], 500);
+$user = json_decode($user, true);
+if (empty($user))
+    output(['error' => 'Unknown user'], 401);
+
 // Generate a token for the user that expires at midnight
 $payload = [
     'role' => 'web_user',
