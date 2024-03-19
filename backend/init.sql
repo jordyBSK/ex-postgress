@@ -40,7 +40,20 @@ grant usage on schema api to esp32;
 grant insert on api.data to esp32;
 grant esp32 to authenticator;
 
+-- create a table to store the users
+create table if not exists api.users (
+	id serial primary key,
+	username character varying(50) NOT NULL UNIQUE,
+	password character varying(60) NOT NULL
+);
+
 -- create role for the users
 create role web_user nologin;
 grant usage on schema api to web_user;
 grant web_user to authenticator;
+
+-- create a role for the login
+create role web_login nologin;
+grant usage on schema api to web_login;
+grant select on api.users to web_login;
+grant web_login to authenticator;

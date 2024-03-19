@@ -18,6 +18,10 @@ if (!isset($data['username']) || !isset($data['password']))
 $dotenv = new Dotenv();
 $dotenv->load(__DIR__ . '/../.env');
 
+// Generate a token and use it to get the user
+$token = JWT::encode(['role' => 'web_login', 'exp' => time() + 3], $_ENV['JWT_SECRET'], 'HS256');
+$user = callAPI('GET', $_ENV['POSTGREST_API'] . "/users?username=eq.{$data['username']}", [], ["Authorization: Bearer $token"]);
+
 // Generate a token for the user that expires at midnight
 $payload = [
     'role' => 'web_user',
