@@ -28,6 +28,8 @@ if ($user === false || isset($user["message"]))
 $user = json_decode($user, true);
 if (empty($user))
     output(['error' => 'Unknown user'], 401);
+if (!password_verify($data['password'], $user[0]['password']))
+    output(['error' => 'Invalid password'], 401);
 
 // Generate a token for the user that expires at midnight
 $payload = [
