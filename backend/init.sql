@@ -50,6 +50,8 @@ create table if not exists api.users (
 create role web_user nologin;
 grant usage on schema api to web_user;
 grant select on api.data to web_user;
+grant all on sequence users_id_seq to web_user;
+grant insert on api.users to web_user;
 grant web_user to authenticator;
 
 -- create a role for the login
