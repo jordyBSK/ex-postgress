@@ -13,7 +13,6 @@ create role authenticator noinherit login password 'mysecretpassword';
 -- create anonymous role
 create role web_anon nologin;
 grant usage on schema api to web_anon;
-grant select on api.data to web_anon;
 grant web_anon to authenticator;
 
 -- convert unix timestamp to timestamp and insert it
@@ -50,6 +49,7 @@ create table if not exists api.users (
 -- create role for the users
 create role web_user nologin;
 grant usage on schema api to web_user;
+grant select on api.data to web_user;
 grant web_user to authenticator;
 
 -- create a role for the login
