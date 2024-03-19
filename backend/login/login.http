@@ -1,12 +1,13 @@
-### Authentificate as Rignchen
+### Authentificate as admin
 # @no-cookie-jar
 # @no-log
-GET http://localhost:8080/login.php?username=Rignchen&password=admin123
+GET http://localhost:8080/login.php?username=admin&password=admin
 
 
 ### Create a new user "toto" with password "IamToto"
 # @no-cookie-jar
 # @no-log
+# the password said here is the hash of "IamToto"
 POST http://192.168.1.66:3000/users
 Authorization: Bearer
 Content-Type: application/json

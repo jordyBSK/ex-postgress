@@ -66,6 +66,25 @@ Here are 2 diagrams that show how the data is transfered from the esp32 to the w
 ### Software
 ![software](/assets/software-diagram.png)
 
+## User Login
+When the database is created, a user is created with the following credentials
+```
+Username: admin
+Password: admin
+```
+You can use these credentials to login to the web interface for the first time.\
+This user can be used to create other users with different credentials\
+All users have the same rights meaning they can all create users and read data from the database
+### Start login backend
+To start the login backend, you can run the following command
+```bash
+cd backend/login
+php -S localhost:8000 -t public
+```
+### Test login backend
+You can test the login backend by going to the file `backend/login/login.http` and running the requests, 
+be sure to give the right credentials to the requests and to give the token to the requests with the `Authorization` header
+
 ## Web Interface
 ### Installation
 This project uses a react web interface to display the data from the database

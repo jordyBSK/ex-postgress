@@ -59,3 +59,6 @@ create role web_login nologin;
 grant usage on schema api to web_login;
 grant select on api.users to web_login;
 grant web_login to authenticator;
+
+-- create first user to be able to register other users
+insert into api.users(username, password) values ('admin', '$2y$10$vJMf8H4u0f913VOJJDqVIeYrqnZBSzgYZ3Zyoh76MDjf6ZlmNDKPu');
