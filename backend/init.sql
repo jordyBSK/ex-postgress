@@ -39,3 +39,8 @@ create role esp32 nologin;
 grant usage on schema api to esp32;
 grant insert on api.data to esp32;
 grant esp32 to authenticator;
+
+-- create role for the users
+create role web_user nologin;
+grant usage on schema api to web_user;
+grant web_user to authenticator;

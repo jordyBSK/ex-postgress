@@ -1,0 +1,5 @@
+### Authentificate as Rignchen
+# @no-cookie-jar
+# @no-log
+GET http://localhost:8080/login.php?username=Rignchen&password=admin123
+
