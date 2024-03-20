@@ -13,7 +13,6 @@ create role authenticator noinherit login password 'mysecretpassword';
 -- create anonymous role
 create role web_anon nologin;
 grant usage on schema api to web_anon;
-grant select on api.data to web_anon;
 grant web_anon to authenticator;
 
 -- convert unix timestamp to timestamp and insert it
@@ -39,3 +38,27 @@ create role esp32 nologin;
 grant usage on schema api to esp32;
 grant insert on api.data to esp32;
 grant esp32 to authenticator;
+
+-- create a table to store the users
+create table if not exists api.users (
+	id serial primary key,
+	username character varying(50) NOT NULL UNIQUE,
+	password character varying(60) NOT NULL
+);
+
+-- create role for the users
+create role web_user nologin;
+grant usage on schema api to web_user;
+grant select on api.data to web_user;
+grant usage, select on sequence users_id_seq to web_user;
+grant insert on api.users to web_user;
+grant web_user to authenticator;
+
+-- create a role for the login
+create role web_login nologin;
+grant usage on schema api to web_login;
+grant select on api.users to web_login;
+grant web_login to authenticator;
+
+-- create first user to be able to register other users
+insert into api.users(username, password) values ('admin', '$2y$10$vJMf8H4u0f913VOJJDqVIeYrqnZBSzgYZ3Zyoh76MDjf6ZlmNDKPu');

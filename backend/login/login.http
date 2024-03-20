@@ -1,0 +1,32 @@
+### Authentificate as admin
+# @no-cookie-jar
+# @no-log
+GET http://localhost:8080/login.php?username=admin&password=admin
+
+
+### Create a new user "toto" with password "IamToto"
+# @no-cookie-jar
+# @no-log
+# the password said here is the hash of "IamToto"
+POST http://192.168.1.66:3000/users
+Authorization: Bearer
+Content-Type: application/json
+
+{
+    "username": "toto",
+    "password": "$2y$10$hb2l5EmwitT6DCMzPDsFsOXLZi2UxwaKur9CZSbJm1G0lhCLWU0nm"
+}
+
+
+### Authentificate as toto
+# @no-cookie-jar
+# @no-log
+GET http://localhost:8080/login.php?username=toto&password=IamToto
+
+
+### Get the last 20 data entries
+# @no-cookie-jar
+# @no-log
+GET http://192.168.1.66:3000/data?order=timestamp.desc,ip&limit=20
+Authorization: Bearer
+

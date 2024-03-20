@@ -1,0 +1,19 @@
+{
+    "name": "rignchen/login",
+    "description": "login backend to autotificate users",
+    "type": "project",
+    "require": {
+        "firebase/php-jwt": "^6.10",
+        "symfony/dotenv": "^7.0",
+        "ext-curl": "*"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^7.0"
+    },
+    "authors": [
+        {
+            "name": "Rignchen",
+            "email": "rinchendemort@gmail.com"
+        }
+    ]
+}
