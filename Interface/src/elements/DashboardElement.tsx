@@ -52,7 +52,6 @@ export default function DashboardElement() {
             .then(response => response.json())
             .then(apiData => {
                 setData(apiData);
-                console.log(apiData);
             })
             .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
     };
@@ -177,7 +176,7 @@ export default function DashboardElement() {
                     </div>
                 </div>
                 <div className="w-full">
-                    <MonthlyAverageStore/>
+                    <MonthlyAverageStore precision={'month'} beginning={'2024-01-01'} end={'2025-01-01'}/>
                 </div>
             </div>
         </>
