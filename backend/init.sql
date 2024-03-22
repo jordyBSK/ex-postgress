@@ -62,3 +62,23 @@ grant web_login to authenticator;
 
 -- create first user to be able to register other users
 insert into api.users(username, password) values ('admin', '$2y$10$vJMf8H4u0f913VOJJDqVIeYrqnZBSzgYZ3Zyoh76MDjf6ZlmNDKPu');
+
+-- create a view to get the average temperature and humidity of each day
+create or replace function api.avg_date(
+	delta varchar
+)
+returns table(
+	temperature double precision, 
+	humidity double precision, 
+	date timestamp
+) as $$
+begin
+	return query select 
+		avg(temperature) as temperature, 
+		avg(humidity) as humidity,
+		date_trunc(delta, timestamp) as date
+	from api.seed
+	group by date
+	order by date;
+end;
+$$ language plpgsql;
