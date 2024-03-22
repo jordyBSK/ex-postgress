@@ -828,7 +828,7 @@ var require_react_jsx_dev_runtime_development = __commonJS({
               } else {
                 typeString = typeof type;
               }
-              error("React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
+              error("React.jsx: type is invalid -- expected a string (for built-in elements) or a class/function (for composite elements) but got: %s.%s", typeString, info);
             }
             var element = jsxDEV(type, props, key, source, self);
             if (element == null) {

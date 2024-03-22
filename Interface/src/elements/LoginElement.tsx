@@ -29,7 +29,7 @@ export default function LoginElement() {
             <section className="h-screen">
                 <div className="flex h-full items-center justify-center">
                     <div className="md:w-8/12 lg:ml-6 lg:w-5/12 shadow-2xl p-12 bg-white rounded-xl">
-                        <form method="post" onSubmit={submit} action="/Interface/src/login.php">
+                        <form method="post" onSubmit={submit} >
                             <div className="relative mb-6">
                                 <input
                                     type="text"

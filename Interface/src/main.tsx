@@ -2,10 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import LoginElement from "./components/LoginElement.tsx";
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import DashboardElement from "./components/DashboardElement.tsx";
-import RegisterElement from "./components/RegisterElement.tsx";
+import DashboardElement from "./elements/DashboardElement.tsx";
+import PlanElement from "@/elements/PlanElement.tsx";
 
 const router = createBrowserRouter([
     {
@@ -14,15 +13,10 @@ const router = createBrowserRouter([
         children: [
             {
                 path:"/",
-                element: <LoginElement/>
-            },
-            {
-                path:"/register",
-                element: <RegisterElement/>
-            },
-            {
-                path:"/home",
              element: <DashboardElement/>
+            },{
+            path:"/plan",
+                element:<PlanElement/>
             }
         ]
     },
