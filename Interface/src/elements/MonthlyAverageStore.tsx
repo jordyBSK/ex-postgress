@@ -1,19 +1,17 @@
 import { ChartElement } from "./ChartElement.tsx";
-
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 interface Data {
     avg_temperature: number;
     avg_humidity: number;
-    date: number;
+    date: string; // Change the type of date to string
 }
-export function MonthlyAverageStore({precision, beginning, end}:{precision: string, beginning: string, end: string}) {
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+export function MonthlyAverageStore({ precision, beginning, end }: { precision: string; beginning: string; end: string; }) {
     const [data, setData] = useState<Data[]>([]);
 
     useEffect(() => {
-        const url = `http://192.168.1.66:3000/rpc/daily_avg?prec=${precision}&and=(date.gte.${beginning},date.lt.${end})`;
+        const url = `http://192.168.1.66:3000/rpc/avg_date?prec=${precision}&and=(date.gte.${beginning},date.lt.${end})`;
         console.log(url);
         fetch(url)
             .then(response => response.json())
@@ -25,9 +23,20 @@ export function MonthlyAverageStore({precision, beginning, end}:{precision: stri
             });
     }, []);
 
+    // Function to format date string from API
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        return formattedDate;
+    };
+
     return (
         <>
-            <ChartElement humidityAverages={data.map(d => d.avg_humidity)} temperatureAverages={data.map(d => d.avg_temperature)} monthNames={monthNames}/>
+            <ChartElement
+                humidityAverages={data.map(d => d.avg_humidity)}
+                temperatureAverages={data.map(d => d.avg_temperature)}
+                monthNames={data.map(d => formatDate(d.date))} // Format date here
+            />
         </>
     );
 }

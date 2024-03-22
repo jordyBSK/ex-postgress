@@ -162,12 +162,14 @@ export default function DashboardElement() {
                     </div>
                     <div className="flex gap-8 mb-12">
                         <div className="w-1/2">
-                            <CardElement
-                                theme={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
-                                element={<ChartElement monthNames={dateRange.slice(0, -1)}
-                                                       humidityAverages={humidityAverages}
-                                                       temperatureAverages={temperatureAverages}/>}
-                            />
+
+
+                            {startDate && endDate ?
+                                <CardElement
+                                    theme={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
+                                    element={<MonthlyAverageStore precision={'day'} beginning={startDate.toDateString()} end={endDate.toDateString()}/>}
+                                /> : ""
+                            }
                         </div>
                         <div className="w-1/2">
                             <CardElement element={<MonthAverageStore select={monthSelected}/>}
@@ -177,6 +179,10 @@ export default function DashboardElement() {
                 </div>
                 <div className="w-full">
                     <MonthlyAverageStore precision={'month'} beginning={'2024-01-01'} end={'2025-01-01'}/>
+                    {startDate && endDate ?
+                        <MonthlyAverageStore precision={'day'} beginning={startDate.toDateString()} end={endDate.toDateString()}/> :
+                        ""
+                    }
                 </div>
             </div>
         </>
