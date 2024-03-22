@@ -24,7 +24,6 @@ export default function DashboardElement() {
     const [humidityAverages, setHumidityAverages] = useState<number[]>([]);
     const [temperatureAverages, setTemperatureAverages] = useState<number[]>([]);
 
-    const [darkTheme, setDarkTheme] = useState<boolean>(false);
 
     useEffect(() => {
         fetchData();
@@ -105,22 +104,17 @@ export default function DashboardElement() {
         setEndDate(null)
     }, [monthSelected]);
 
-    const toggleDarkTheme = () => {
-        setDarkTheme(!darkTheme);
-    };
 
     return (
         <>
-            <button className="mt-12" onClick={toggleDarkTheme}>{darkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'}</button>
-
-            <div className={`w-3/4 justify-center align-middle justify-items-center ${darkTheme ? 'dark-theme' : ''}`}>
+            <div className={`w-3/4 justify-center align-middle justify-items-center `}>
                 <div className="col-span-2">
                     <nav className="fixed w-full top-0 start-0">
                         <div className="max-w-screen-xl mx-auto">
                             <div className="flex justify-center p-4">
-                                <ul className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 font-medium rounded-lg bg-blue-50">
+                                <ul className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 font-medium rounded-lg bg-white dark:bg-slate-800">
                                     {monthNames.map(month => (
-                                        <li className="block py-2 px-3 text-black rounded"
+                                        <li className="block py-2 px-3 text-black dark:text-white rounded"
                                             key={month}
                                             onClick={() => handleMonthClick(month)}>
                                             {month}
@@ -133,40 +127,34 @@ export default function DashboardElement() {
                 </div>
 
                 <div>
-                    <div className="flex text-center align-middle mt-12 gap-10">
+                    <div className="flex text-center align-middle mt-12 gap-4">
                         <div>
-                            <input className="bg-white font-bold h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl "
-                                   style={{
-                                       backgroundColor: darkTheme ? '#1D232C' : '#FFF',
-                                       color: darkTheme ? '#FFF' : '#000'
-                                   }}
-                                   type="date"
-                                   value={startDate ? startDate.toISOString().split('T')[0] : ''}
-                                   onChange={e => setStartDate(new Date(e.target.value))}/>
+                            <input
+                                className="bg-white font-bold h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl dark:bg-slate-800 dark:text-white"
+
+                                type="date"
+                                value={startDate ? startDate.toISOString().split('T')[0] : ''}
+                                onChange={e => setStartDate(new Date(e.target.value))}/>
                         </div>
 
                         <div>
-                            <input className="bg-white font-bold h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl "
-                                   style={{
-                                       backgroundColor: darkTheme ? '#1D232C' : '#FFF',
-                                       color: darkTheme ? '#FFF' : '#000'
-                                   }}
-                                   type="date"
-                                   value={endDate ? endDate.toISOString().split('T')[0] : ''}
-                                   onChange={e => setEndDate(new Date(e.target.value))}/>
+                            <input
+                                className="bg-white font-bold h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl dark:bg-slate-800 dark:text-white"
+                                type="date"
+                                value={endDate ? endDate.toISOString().split('T')[0] : ''}
+                                onChange={e => setEndDate(new Date(e.target.value))}/>
                         </div>
                     </div>
 
                     <div className="">
                         {startDate && endDate ? (
-                            <CircularElementData darkTheme={darkTheme}
-                                dateRange={`${startDate.toDateString()} to ${endDate.toDateString()}`}
-                                month={monthSelected}
-                                data={data}
+                            <CircularElementData
+                                                 dateRange={`${startDate.toDateString()} to ${endDate.toDateString()}`}
+                                                 month={monthSelected}
+                                                 data={data}
                             />
                         ) : (
                             <CircularElementData
-                                darkTheme={darkTheme}
                                 dateRange={monthSelected}
                                 month={monthSelected}
                                 data={data}
@@ -175,7 +163,7 @@ export default function DashboardElement() {
                     </div>
                     <div className="flex gap-8 mb-12">
                         <div className="w-1/2">
-                            <CardElement darkTheme={darkTheme}
+                            <CardElement
                                 theme={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
                                 element={<ChartElement monthNames={dateRange.slice(0, -1)}
                                                        humidityAverages={humidityAverages}
@@ -183,7 +171,7 @@ export default function DashboardElement() {
                             />
                         </div>
                         <div className="w-1/2">
-                            <CardElement darkTheme={darkTheme} element={<MonthAverageStore select={monthSelected}/>}
+                            <CardElement element={<MonthAverageStore select={monthSelected}/>}
                                          theme={`${monthSelected} Chart`}/>
                         </div>
                     </div>

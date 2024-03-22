@@ -6,12 +6,12 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-export default function CardElement({ element, theme, darkTheme }: { element: ReactNode, theme: string, darkTheme: boolean }) {
+export default function CardElement({ element, theme}: { element: ReactNode, theme: string}) {
     return (
-        <Card className="min-w-80 flex flex-col" style={{ backgroundColor: darkTheme ? '#1D232C' : '#FFF' }}>
+        <Card className="min-w-72 flex flex-col bg-white dark:bg-slate-800">
             <div className="flex justify-start">
                 <CardHeader>
-                    <CardTitle className="text-gray-500">{theme}</CardTitle>
+                    <CardTitle className="text-gray-500 dark:text-white">{theme}</CardTitle>
                 </CardHeader>
             </div>
             <div className="flex-grow flex justify-center items-center">

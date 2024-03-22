@@ -1,4 +1,4 @@
-export default function CircularElement({data, unity, color,darkTheme}: { data: number | string, unity: string, color: string, darkTheme:boolean }) {
+export default function CircularElement({data, unity, color}: { data: number | string, unity: string, color: string}) {
     if (data === null || data === undefined) {
         return null;
     }
@@ -18,7 +18,7 @@ export default function CircularElement({data, unity, color,darkTheme}: { data: 
 
     return (
         <div className="flex">
-            <text className={`${darkTheme ? 'text-white ' : ' ' } text-center font-bold text-xl mr-16`}>
+            <text className=" text-center font-bold text-xl mr-16 dark:text-white">
                 {data} {unity}
             </text>
             <svg className="w-32 h-32 " viewBox="0 0 100 100">

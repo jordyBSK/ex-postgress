@@ -8,11 +8,10 @@ interface Data {
     humidity: number;
 }
 
-export default function CircularElementData({month, data,darkTheme}: {
+export default function CircularElementData({month, data}: {
     month: string,
     data: Data[],
-    dateRange: string,
-    darkTheme:boolean
+    dateRange: string
 }) {
     const [averageTemperature, setAverageTemperature] = useState<string>("0.00");
     const [averageHumidity, setAverageHumidity] = useState<string>("0.00");
@@ -57,16 +56,22 @@ export default function CircularElementData({month, data,darkTheme}: {
 
 
     return (
-        <div className="flex gap-10 mb-6 mt-6">
+        <div className="flex gap-4 mb-6 mt-6">
             <div className="w-80">
-                <CardElement darkTheme={darkTheme} element={<CircularElement darkTheme={darkTheme} color={"blue"} data={lastHumidity} unity={"%"}/>}
-                             theme="Humidity"/>
+                <CardElement
+                             element={<CircularElement  color={"orange"} data={lastTemperature}
+                                                       unity={"°C"}/>}
+                             theme="Temperature"/>
             </div>
 
             <div className="w-80">
-                <CardElement darkTheme={darkTheme} element={<CircularElement darkTheme={darkTheme} color={"red"} data={lastTemperature} unity={"°C"}/>}
-                             theme="Temperature"/>
+                <CardElement
+                             element={<CircularElement  color={"blue"} data={lastHumidity}
+                                                       unity={"%"}/>}
+                             theme="Humidity"/>
             </div>
+
+
         </div>
     );
 }

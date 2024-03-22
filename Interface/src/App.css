@@ -1,14 +1,9 @@
-:root {
-  --bg_body: #212121;
-}
-:root[theme=dark] {
-  --bg_body: #cdcdcd;
-}
+
 #root {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 body{
-  background: var(--bg_body);
+  background: #F9F9F9;
 }
