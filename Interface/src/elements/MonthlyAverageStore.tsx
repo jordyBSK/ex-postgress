@@ -11,7 +11,7 @@ export function MonthlyAverageStore({ precision, beginning, end }: { precision: 
     const [data, setData] = useState<Data[]>([]);
 
     useEffect(() => {
-        const url = `http://192.168.1.66:3000/rpc/avg_date?prec=${precision}&and=(date.gte.${beginning},date.lt.${end})`;
+        const url = `http://192.168.1.66:3000/rpc/avg_date?delta=${precision}&and=(date.gte.${beginning},date.lt.${end})`;
         console.log(url);
         fetch(url)
             .then(response => response.json())
