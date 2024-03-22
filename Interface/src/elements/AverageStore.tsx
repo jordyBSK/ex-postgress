@@ -4,15 +4,14 @@ import { useEffect, useState } from "react";
 interface Data {
     avg_temperature: number;
     avg_humidity: number;
-    date: string; // Change the type of date to string
+    date: string;
 }
 
-export function MonthlyAverageStore({ precision, beginning, end }: { precision: string; beginning: string; end: string; }) {
+export function AverageStore({ precision, beginning, end }: { precision: string; beginning: string; end: string; }) {
     const [data, setData] = useState<Data[]>([]);
 
     useEffect(() => {
         const url = `http://192.168.1.66:3000/rpc/avg_date?delta=${precision}&and=(date.gte.${beginning},date.lt.${end})`;
-        console.log(url);
         fetch(url)
             .then(response => response.json())
             .then((apiData: Data[]) => {
@@ -41,4 +40,4 @@ export function MonthlyAverageStore({ precision, beginning, end }: { precision: 
     );
 }
 
-export default MonthlyAverageStore;
+export default AverageStore;

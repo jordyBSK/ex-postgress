@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import CircularElementData from "./CircularElementData.tsx";
-import MonthlyAverageStore from "./MonthlyAverageStore.tsx";
+import MonthlyAverageStore, {AverageStore} from "./AverageStore.tsx";
 import CardElement from "@/elements/CardElement.tsx";
 import MonthAverageStore from "@/elements/MonthAverageStore.tsx";
+import MonthElement from "@/elements/MonthElement.tsx";
 
 export default function DashboardElement() {
     interface Data {
@@ -30,7 +31,6 @@ export default function DashboardElement() {
     }, [startDate, endDate]);
 
 
-
     const fetchData = () => {
         fetch("http://192.168.1.66:3000/seed")
             .then(response => response.json())
@@ -39,8 +39,6 @@ export default function DashboardElement() {
             })
             .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
     };
-
-
 
 
     const handleMonthClick = (month: string) => {
@@ -94,29 +92,33 @@ export default function DashboardElement() {
                         </div>
                     </div>
 
-                    <div className="">
-                        {startDate && endDate ? (
-                            <CircularElementData
-                                                 dateRange={`${startDate.toDateString()} to ${endDate.toDateString()}`}
-                                                 month={monthSelected}
-                                                 data={data}
-                            />
-                        ) : (
-                            <CircularElementData
-                                dateRange={monthSelected}
-                                month={monthSelected}
-                                data={data}
-                            />
-                        )}
+                    <div className="flex">
+                        <div className="w-1/2">
+                            {startDate && endDate ? (
+                                <CircularElementData
+                                    dateRange={`${startDate.toDateString()} to ${endDate.toDateString()}`}
+                                    month={monthSelected}
+                                    data={data}
+                                />
+                            ) : (
+                                <CircularElementData
+                                    dateRange={monthSelected}
+                                    month={monthSelected}
+                                    data={data}
+                                />
+                            )}
+                        </div>
+                        <div className="w-1/2">
+                            <MonthElement monthSelected={d.getMonth()}/>
+                        </div>
                     </div>
                     <div className="flex gap-8 mb-12">
                         <div className="w-1/2">
-
-
                             {startDate && endDate ?
                                 <CardElement
                                     theme={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
-                                    element={<MonthlyAverageStore precision={'day'} beginning={startDate.toDateString()} end={endDate.toDateString()}/>}
+                                    element={<MonthlyAverageStore precision={'day'} beginning={startDate.toDateString()}
+                                                                  end={endDate.toDateString()}/>}
                                 /> : ""
                             }
                         </div>
@@ -127,7 +129,7 @@ export default function DashboardElement() {
                     </div>
                 </div>
                 <div className="w-full">
-                    <MonthlyAverageStore precision={'month'} beginning={'2024-01-01'} end={'2025-01-01'}/>
+                    <AverageStore precision={'month'} beginning={'2024-01-01'} end={'2025-01-01'}/>
                 </div>
             </div>
         </>
