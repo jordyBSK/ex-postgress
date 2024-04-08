@@ -1,15 +1,15 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import CircularElementData from "./CircularElementData.tsx";
-import MonthlyAverageStore, {AverageStore} from "./AverageStore.tsx";
+import MonthlyAverageStore, { AverageStore } from "./AverageStore.tsx";
 import CardElement from "@/elements/CardElement.tsx";
 import MonthAverageStore from "@/elements/MonthAverageStore.tsx";
 import MonthElement from "@/elements/MonthElement.tsx";
 
 export default function DashboardElement() {
     interface Data {
-        timestamp: number;
-        temperature: number;
-        humidity: number;
+        date: number;
+        avg_temperature: number;
+        avg_humidity: number;
     }
 
     const d = new Date();
@@ -32,10 +32,11 @@ export default function DashboardElement() {
 
 
     const fetchData = () => {
-        fetch("http://192.168.1.66:3000/seed")
+        fetch("http://192.168.1.66:3000/rpc/avg_date?delta=second&limit=1&order=date.desc")
             .then(response => response.json())
             .then(apiData => {
                 setData(apiData);
+                console.log(apiData)
             })
             .catch(error => console.error('Erreur lors de la récupération des données de l\'API :', error));
     };
@@ -53,7 +54,7 @@ export default function DashboardElement() {
 
     return (
         <>
-            <div className={`w-3/4 justify-center align-middle justify-items-center `}>
+            <div className={`w-full justify-center align-middle justify-items-center `}>
                 <div className="col-span-2">
                     <nav className="fixed w-full top-0 start-0">
                         <div className="max-w-screen-xl mx-auto">
@@ -73,27 +74,27 @@ export default function DashboardElement() {
                 </div>
 
                 <div>
-                    <div className="flex text-center align-middle mt-12 gap-4">
-                        <div>
+                    <div className="flex flex-col md:flex-row text-center align-middle mt-12 gap-4">
+                        <div className="md:w-1/2">
                             <input
-                                className="bg-white font-bold h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl dark:bg-slate-800 dark:text-white"
+                                className="bg-white font-bold h-12 pl-10 pr-8 w-full md:w-80 shadow-lg rounded-xl dark:bg-slate-800 dark:text-white"
 
                                 type="date"
                                 value={startDate ? startDate.toISOString().split('T')[0] : ''}
                                 onChange={e => setStartDate(new Date(e.target.value))}/>
                         </div>
 
-                        <div>
+                        <div className="md:w-1/2">
                             <input
-                                className="bg-white font-bold h-12 pl-10 pr-8 w-80 shadow-lg rounded-xl dark:bg-slate-800 dark:text-white"
+                                className="bg-white font-bold h-12 pl-10 pr-8 w-full md:w-80 shadow-lg rounded-xl dark:bg-slate-800 dark:text-white"
                                 type="date"
                                 value={endDate ? endDate.toISOString().split('T')[0] : ''}
                                 onChange={e => setEndDate(new Date(e.target.value))}/>
                         </div>
                     </div>
 
-                    <div className="flex">
-                        <div className="w-1/2">
+                    <div className="flex flex-col md:flex-row">
+                        <div className="md:w-1/2 mr-5">
                             {startDate && endDate ? (
                                 <CircularElementData
                                     dateRange={`${startDate.toDateString()} to ${endDate.toDateString()}`}
@@ -108,12 +109,23 @@ export default function DashboardElement() {
                                 />
                             )}
                         </div>
-                        <div className="w-1/2">
-                            <MonthElement monthSelected={d.getMonth()}/>
+                        <div className="mt-6 md:mt-0">
+
+                            <div className="mt-6">
+                                <MonthElement year={d.getFullYear()} month={d.getMonth()}/>
+                            </div>
+                            <div className="mb-3">
+                                <MonthElement year={d.getFullYear()} month={d.getMonth() -1}/>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex gap-8 mb-12">
-                        <div className="w-1/2">
+                    <div className="flex flex-col md:flex-row mb-12">
+
+                        <div className="">
+                            <CardElement element={<MonthAverageStore select={monthSelected}/>}
+                                         theme={`${monthSelected} Chart`}/>
+                        </div>
+                        <div className="">
                             {startDate && endDate ?
                                 <CardElement
                                     theme={`${startDate ? startDate.toDateString() : ''} to ${endDate ? endDate.toDateString() : ''}`}
@@ -122,13 +134,9 @@ export default function DashboardElement() {
                                 /> : ""
                             }
                         </div>
-                        <div className="w-1/2">
-                            <CardElement element={<MonthAverageStore select={monthSelected}/>}
-                                         theme={`${monthSelected} Chart`}/>
-                        </div>
                     </div>
                 </div>
-                <div className="w-full">
+                <div className="flex-row">
                     <AverageStore precision={'month'} beginning={'2024-01-01'} end={'2025-01-01'}/>
                 </div>
             </div>
